@@ -144,7 +144,7 @@ class CregistryController
                     $arrPrepare[":path"] = $strPath;
 
                     CMS::$db->query($strSql, $arrPrepare);
-                    $arrDataTemp = CMS::$db->fetch(M_FETCH_ASSOC, false);
+                    $arrDataTemp = CMS::$db->fetch(FM_FETCH_ASSOC, false);
 
                     if(CMS::$db->row_count() > 0)
                     {
@@ -159,7 +159,7 @@ class CregistryController
                             {
                                 foreach(self::$ch_lang as $keyData => &$valData)
                                 {
-                                    if(FM::is_variable($valData['path']) && FM::is_variable($arrDataOtherLang[$keyData]))
+                                    if(isset($valData['path']) && isset($arrDataOtherLang[$keyData]))
                                         $valData['path'] .= "/" . $arrDataOtherLang[$keyData];
                                 }
                             }

@@ -93,6 +93,8 @@ class Cmnews extends Cmodel
      */
     public function category_list($intCategoryId = null)
     {
+        $arrData = null;
+
         $strSqlWhere = "";
         if(FM::is_variable($intCategoryId))
             $strSqlWhere = "AND c.id = $intCategoryId";

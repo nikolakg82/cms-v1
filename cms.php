@@ -1,15 +1,18 @@
 <?php
 define('CMS_ROOT', realpath(dirname(__FILE__)) . '/');
 
-if(!defined('CMS_CORE'))
-    define('CMS_CORE', str_replace('cms1/', '', CMS_ROOT));
+if(!defined('APP_CORE'))
+    define('APP_CORE', str_replace(basename(__DIR__) . '/', '', CMS_ROOT));
 
-require_once (CMS_CORE . 'fm/fm.php');
+require_once (APP_CORE . 'fm/fm.php');
 FM::includer(CMS_ROOT . 'resources/constants.php');
 FM::includer(CMS_RESOURCES . 'registry.php');
 
 class CMS
 {
+    /**
+     * @var Fdb
+     */
     public static $db;
 
     public static $view;

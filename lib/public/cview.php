@@ -152,7 +152,7 @@ class Cview
      */
     public function display($strPath)
     {
-        if(FM::is_variable($this->display_template))
+        if(isset($this->display_template))
         {
             //@TODO Izbaciti notice u loger
         }
