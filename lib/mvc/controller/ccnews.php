@@ -18,7 +18,7 @@ class Ccnews extends Ccontroller
 
         if(FM::is_variable($this->get_path()))
         {
-            if(FM::is_variable($this->get_path()[CMS::$db_prefix . 'news']))
+            if(isset($this->get_path()[CMS::$db_prefix . 'news']))
                 $this->get_view()->one_news($this->get_path()[CMS::$db_prefix . 'news']);
             else
                 $this->get_view()->list_news($this->get_path()[CMS::$db_prefix . 'news_category']);
