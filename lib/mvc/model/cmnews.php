@@ -36,7 +36,7 @@ class Cmnews extends Cmodel
 
             if(FM::is_variable($intRecordData))
             {
-                $strLink .= ".html?";
+                $strLink .= "." . CMS::$view->get_type() . "?";
                 $arrData['pagination'] = $this->pagination_data(Cnews::$page, Cnews::$news_page, $intRecordData, $strLink);
                 $strSqlLimit = $this->bild_limit_pagination(Cnews::$page, Cnews::$news_page);
             }

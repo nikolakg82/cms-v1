@@ -119,11 +119,12 @@ class CregistryController
     public static function load($strKey)
     {
         $objController = Floader::load("C$strKey");
-        $objModel = Floader::load("M$strKey");
-        $objView = Floader::load("V$strKey");
+        // @TODO model i view ne idu dinamicki load ka i kontroler, view se izbacuje skroz
+//        $objModel = Floader::load("M$strKey");
+//        $objView = Floader::load("V$strKey");
 
-        $objController->set_view($objView);
-        $objController->set_model($objModel);
+//        $objController->set_view($objView);
+//        $objController->set_model($objModel);
 
         foreach(Clang::get_lang() as $keyLang => $lang)
         {
