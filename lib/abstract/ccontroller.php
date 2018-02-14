@@ -1,6 +1,8 @@
 <?php
 
-abstract class Ccontroller
+// @TODO - napraviti interface za controler, da to bude kao fancy, a i ako neko resi da pravi svoj kontroler da ima interface za njega
+
+abstract class Ccontroller implements Controller
 {
     private $model;
 
@@ -11,7 +13,7 @@ abstract class Ccontroller
     public function set_model($objModel)
     {
         $this->model = $objModel;
-        $this->get_view()->set_model($objModel);
+//        $this->get_view()->set_model($objModel);
     }
 
     public function set_view($objView)
@@ -37,5 +39,20 @@ abstract class Ccontroller
     public function get_path()
     {
         return $this->path;
+    }
+
+    public function setModel()
+    {
+        // TODO: Implement setModel() method.
+    }
+
+    public function getModel()
+    {
+        // TODO: Implement getModel() method.
+    }
+
+    public function run()
+    {
+        // TODO: Implement run() method.
     }
 }

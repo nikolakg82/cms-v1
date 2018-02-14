@@ -16,6 +16,8 @@ class Ccnews extends Ccontroller
     {
         self::$page = Ffetch::name('page');
 
+        $objResponse = Floader::load("Response");
+
         if(FM::is_variable($this->get_path()))
         {
 //            if(isset($this->get_path()[CMS::$db_prefix . 'news']))
@@ -27,10 +29,14 @@ class Ccnews extends Ccontroller
         {
 
             $arrNews = Floader::load("Mnews")->list_items();
-            return Floader::load("Response")->setData($arrNews)->setResponseCode(200)->setTemplatePath(CMS_C_NEWS . '/list_news.tpl');
+
+            $objResponse = $objResponse->setData($arrNews)->setResponseCode(200)->setTemplatePath(CMS_C_NEWS . '/list_news.tpl');
+
 //            return ['data' => $arrNews, 'template' => CMS_C_NEWS . '/list_news.tpl'];
 //            var_dump($arrNews);
 //            $this->get_view()->list_news();
         }
+
+        return $objResponse;
     }
 }

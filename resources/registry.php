@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * Add interfaces
+ */
+ InterfaceLoader::addItem('Controller',     CMS_INTERFACE . 'Controller.php');
+
+/**
  * Staticne klase
  */
 Floader::add_class('CregistryController',CMS_STATIC . 'cregistrycontroller.php');
@@ -11,7 +16,7 @@ Floader::add_class('CCregistryAdmin',    CMS_STATIC . 'cregistryadmin.php');
  * Abstraktne klase
  */
 Floader::add_class('Cstart',             CMS_ABSTRACT . 'cstart.php',         'abstract');
-Floader::add_class('Ccontroller',        CMS_ABSTRACT . 'ccontroller.php',    'abstract');
+Floader::add_class('Ccontroller',        CMS_ABSTRACT . 'ccontroller.php',    'abstract', null, ['Controller']);
 Floader::add_class('Cmodel',             CMS_ABSTRACT . 'cmodel.php',         'abstract');
 Floader::add_class('Ccview',             CMS_ABSTRACT . 'ccview.php',         'abstract');
 
