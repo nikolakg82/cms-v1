@@ -1,4 +1,7 @@
 <?php
+
+use fm\FM, fm\lib\help\Floader;
+
 define('CMS_ROOT', realpath(dirname(__FILE__)) . '/');
 
 if(!defined('APP_CORE'))

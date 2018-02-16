@@ -1,6 +1,11 @@
 <?php
 
-class Ccnews extends Ccontroller
+namespace cms\lib\mvc\controller;
+
+use cms\lib\abstracts as abstracts;
+use fm\lib\help as help;
+
+class ControllerNews extends abstracts\Controller
 {
     /**
      * @var int - Broj vesti po strani
@@ -14,9 +19,9 @@ class Ccnews extends Ccontroller
 
     public function run()
     {
-        self::$page = Ffetch::name('page');
+        self::$page = help\Ffetch::name('page');
 
-        $objResponse = Floader::load("Response");
+        $objResponse = help\Floader::load("Response");
 
         if(FM::is_variable($this->get_path()))
         {
@@ -28,7 +33,7 @@ class Ccnews extends Ccontroller
         else
         {
 
-            $arrNews = Floader::load("Mnews")->list_items();
+            $arrNews = $this->getModel()->list_items();
 
             $objResponse = $objResponse->setData($arrNews)->setResponseCode(200)->setTemplatePath(CMS_C_NEWS . '/list_news.tpl');
 

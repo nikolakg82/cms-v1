@@ -1,6 +1,6 @@
 <?php
 
-abstract class Cstart
+abstract class CmsStart
 {
     public function __construct()
     {

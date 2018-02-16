@@ -1,11 +1,13 @@
 <?php
-
 /**
  * Created by PhpStorm.
  * User: Nikola
  * Date: 5/3/2016
  * Time: 2:11 PM
  */
+
+use fm\lib\help\Floader, fm\FM;
+
 class CregistryController
 {
     /**
@@ -66,7 +68,7 @@ class CregistryController
     public static function add_controller($strKey, $strPathMvc)
     {
         Floader::add_class("M$strKey", $strPathMvc . "/model/m$strKey.php", 'public', "Cm$strKey");
-        Floader::add_class("C$strKey", $strPathMvc . "/controller/c$strKey.php", 'public', "Cc$strKey");
+        Floader::add_class('app\lib\mvc\controller\Controller' . ucfirst($strKey), $strPathMvc . "/controller/Controller" . ucfirst($strKey) . ".php", 'public', 'cms\lib\mvc\controller\ControllerNews');
         Floader::add_class("V$strKey", $strPathMvc . "/view/v$strKey.php", 'public', "Cv$strKey");
 
         self::$controllers[$strKey] = array();
@@ -118,14 +120,15 @@ class CregistryController
      */
     public static function load($strKey)
     {
-        $objController = Floader::load("C$strKey");
+        $objController = Floader::load('app\lib\mvc\controller\Controller' . ucfirst($strKey));
         // @TODO model i view ne idu dinamicki load ka i kontroler, view se izbacuje skroz
         $objModel = Floader::load("M$strKey");
 
 //        $objView = Floader::load("V$strKey");
 
 //        $objController->set_view($objView);
-        $objController->set_model($objModel);
+        $objController->setModel($objModel);
+
 
         foreach(Clang::get_lang() as $keyLang => $lang)
         {

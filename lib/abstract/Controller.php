@@ -2,7 +2,11 @@
 
 // @TODO - napraviti interface za controler, da to bude kao fancy, a i ako neko resi da pravi svoj kontroler da ima interface za njega
 
-abstract class Ccontroller implements Controller
+namespace cms\lib\abstracts;
+
+use cms\lib\interfaces as Interfaces;
+
+abstract class Controller implements Interfaces\Controller
 {
     private $model;
 
@@ -13,7 +17,6 @@ abstract class Ccontroller implements Controller
     public function set_model($objModel)
     {
         $this->model = $objModel;
-//        $this->get_view()->set_model($objModel);
     }
 
     public function set_view($objView)
@@ -41,14 +44,14 @@ abstract class Ccontroller implements Controller
         return $this->path;
     }
 
-    public function setModel()
+    public function setModel(Interfaces\Model $objModel)
     {
-        // TODO: Implement setModel() method.
+        $this->model = $objModel;
     }
 
     public function getModel()
     {
-        // TODO: Implement getModel() method.
+        return $this->model;
     }
 
     public function run()

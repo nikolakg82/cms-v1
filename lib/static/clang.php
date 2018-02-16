@@ -1,11 +1,13 @@
 <?php
-
 /**
  * Created by PhpStorm.
  * User: Nikola
  * Date: 5/3/2016
  * Time: 2:16 PM
  */
+
+use fm\FM;
+
 class Clang
 {
     /**

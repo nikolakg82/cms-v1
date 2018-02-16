@@ -1,7 +1,16 @@
 <?php
 
-abstract class Cmodel
+abstract class Cmodel implements \cms\lib\interfaces\Model
 {
+    public function getPaginationData()
+    {
+        // TODO: Implement getPaginationData() method.
+    }
+
+    public function buildPaginationLimit()
+    {
+        // TODO: Implement buildPaginationLimit() method.
+    }
 
     public function pagination_data($intPage, $intPaginationNumber, $intRecCount, $strLink = "", $intShowPage = 3)
     {
