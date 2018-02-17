@@ -21,7 +21,7 @@ class ControllerNews extends abstracts\Controller
     {
         self::$page = help\Ffetch::name('page');
 
-        $objResponse = help\Floader::load("Response");
+        $objResponse = help\ClassLoader::load("Response");
 
         if(FM::is_variable($this->get_path()))
         {

@@ -1,6 +1,6 @@
 <?php
 
-use fm\lib\help\Floader;
+use fm\lib\help\ClassLoader, fm\lib\help\InterfaceLoader;
 
 /**
  * Add interfaces
@@ -11,37 +11,37 @@ InterfaceLoader::addItem('Model',          CMS_INTERFACE . 'Model.php');
 /**
  * Staticne klase
  */
-Floader::add_class('CregistryController',CMS_STATIC . 'cregistrycontroller.php');
-Floader::add_class('Clang',              CMS_STATIC . 'clang.php');
-Floader::add_class('CCregistryAdmin',    CMS_STATIC . 'cregistryadmin.php');
+ClassLoader::addClass('CregistryController',CMS_STATIC . 'cregistrycontroller.php');
+ClassLoader::addClass('Clang',              CMS_STATIC . 'clang.php');
+ClassLoader::addClass('CCregistryAdmin',    CMS_STATIC . 'cregistryadmin.php');
 
 /**
  * Abstraktne klase
  */
-Floader::add_class('CmsStart',           CMS_ABSTRACT . 'CmsStart.php',       'abstract');
-Floader::add_class('Controller',        CMS_ABSTRACT . 'controller.php',    'abstract', null, ['Controller']);
-Floader::add_class('Cmodel',             CMS_ABSTRACT . 'cmodel.php',         'abstract', null, ['Model']);
-Floader::add_class('Ccview',             CMS_ABSTRACT . 'ccview.php',         'abstract');
+ClassLoader::addClass('CmsStart',           CMS_ABSTRACT . 'CmsStart.php',       'abstract');
+ClassLoader::addClass('Controller',        CMS_ABSTRACT . 'controller.php',    'abstract', null, ['Controller']);
+ClassLoader::addClass('Cmodel',             CMS_ABSTRACT . 'cmodel.php',         'abstract', null, ['Model']);
+ClassLoader::addClass('Ccview',             CMS_ABSTRACT . 'ccview.php',         'abstract');
 
 /**
  * Public klase
  */
-Floader::add_class('Smarty',             CMS_SMARTY . 'Smarty.class.php',      'public');
-Floader::add_class('SmartyBC',           CMS_SMARTY . 'SmartyBC.class.php',    'public');
+ClassLoader::addClass('Smarty',             CMS_SMARTY . 'Smarty.class.php',      'public');
+ClassLoader::addClass('SmartyBC',           CMS_SMARTY . 'SmartyBC.class.php',    'public');
 
-Floader::add_class('Cview',              CMS_PUBLIC . 'cview.php',             'public');
+ClassLoader::addClass('Cview',              CMS_PUBLIC . 'cview.php',             'public');
 
-Floader::add_class('Cmindex',            CMS_MODEL . 'cmindex.php',            'public',        'Cmodel');
-Floader::add_class('Ccindex',            CMS_CONTROLLER . 'ccindex.php',       'public',        'Controller');
-Floader::add_class('Cvindex',            CMS_VIEW . 'cvindex.php',             'public',        'Ccview');
+ClassLoader::addClass('Cmindex',            CMS_MODEL . 'cmindex.php',            'public',        'Cmodel');
+ClassLoader::addClass('Ccindex',            CMS_CONTROLLER . 'ccindex.php',       'public',        'Controller');
+ClassLoader::addClass('Cvindex',            CMS_VIEW . 'cvindex.php',             'public',        'Ccview');
 
-Floader::add_class('Cmnews',             CMS_MODEL . 'cmnews.php',             'public',        'Cmodel');
-Floader::add_class('cms\lib\mvc\controller\ControllerNews',  CMS_CONTROLLER . 'ControllerNews.php','public',        'Controller');
-Floader::add_class('Cvnews',             CMS_VIEW . 'cvnews.php',              'public',        'Ccview');
+ClassLoader::addClass('Cmnews',             CMS_MODEL . 'cmnews.php',             'public',        'Cmodel');
+ClassLoader::addClass('cms\lib\mvc\controller\ControllerNews',  CMS_CONTROLLER . 'ControllerNews.php','public',        'Controller');
+ClassLoader::addClass('Cvnews',             CMS_VIEW . 'cvnews.php',              'public',        'Ccview');
 
-Floader::add_class('Cmadmin',            CMS_MODEL . 'cmadmin.php',            'public',        'Cmodel');
-Floader::add_class('Ccadmin',            CMS_CONTROLLER . 'ccadmin.php',       'public',        'Controller');
-Floader::add_class('Cvadmin',            CMS_VIEW . 'cvadmin.php',             'public',        'Ccview');
+ClassLoader::addClass('Cmadmin',            CMS_MODEL . 'cmadmin.php',            'public',        'Cmodel');
+ClassLoader::addClass('Ccadmin',            CMS_CONTROLLER . 'ccadmin.php',       'public',        'Controller');
+ClassLoader::addClass('Cvadmin',            CMS_VIEW . 'cvadmin.php',             'public',        'Ccview');
 
 //Load staticnih klasa
-Floader::load_static_class();
+ClassLoader::loadStaticClass();

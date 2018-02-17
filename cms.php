@@ -1,6 +1,6 @@
 <?php
 
-use fm\FM, fm\lib\help\Floader;
+use fm\FM, fm\lib\help\ClassLoader;
 
 define('CMS_ROOT', realpath(dirname(__FILE__)) . '/');
 
@@ -34,13 +34,13 @@ class CMS
 
     public static function set_db($strDbPathConfig)
     {
-        self::$db = Floader::load('Fdb');
+        self::$db = ClassLoader::load('Fdb');
         self::$db->connect(FM::includer($strDbPathConfig, false));
     }
 
     public static function set_view()
     {
-        self::$view = Floader::load("Cview");
+        self::$view = ClassLoader::load("Cview");
         self::$view->set_theme(APP_THEME);
         self::$view->set_type(Ffetch::name('view'));
         self::$view->set_cache(APP_CACHE_SMARTY_CACHE);

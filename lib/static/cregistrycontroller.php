@@ -6,7 +6,7 @@
  * Time: 2:11 PM
  */
 
-use fm\lib\help\Floader, fm\FM;
+use fm\lib\help\ClassLoader, fm\FM;
 
 class CregistryController
 {
@@ -67,9 +67,9 @@ class CregistryController
      */
     public static function add_controller($strKey, $strPathMvc)
     {
-        Floader::add_class("M$strKey", $strPathMvc . "/model/m$strKey.php", 'public', "Cm$strKey");
-        Floader::add_class('app\lib\mvc\controller\Controller' . ucfirst($strKey), $strPathMvc . "/controller/Controller" . ucfirst($strKey) . ".php", 'public', 'cms\lib\mvc\controller\ControllerNews');
-        Floader::add_class("V$strKey", $strPathMvc . "/view/v$strKey.php", 'public', "Cv$strKey");
+        ClassLoader::addClass("M$strKey", $strPathMvc . "/model/m$strKey.php", 'public', "Cm$strKey");
+        ClassLoader::addClass('app\lib\mvc\controller\Controller' . ucfirst($strKey), $strPathMvc . "/controller/Controller" . ucfirst($strKey) . ".php", 'public', 'cms\lib\mvc\controller\ControllerNews');
+        ClassLoader::addClass("V$strKey", $strPathMvc . "/view/v$strKey.php", 'public', "Cv$strKey");
 
         self::$controllers[$strKey] = array();
     }
@@ -120,9 +120,9 @@ class CregistryController
      */
     public static function load($strKey)
     {
-        $objController = Floader::load('app\lib\mvc\controller\Controller' . ucfirst($strKey));
+        $objController = ClassLoader::load('app\lib\mvc\controller\Controller' . ucfirst($strKey));
         // @TODO model i view ne idu dinamicki load ka i kontroler, view se izbacuje skroz
-        $objModel = Floader::load("M$strKey");
+        $objModel = ClassLoader::load("M$strKey");
 
 //        $objView = Floader::load("V$strKey");
 
