@@ -1,25 +1,19 @@
 <?php
 
-abstract class Cmodel implements \cms\lib\interfaces\Model
+namespace cms\lib\abstracts;
+
+use fm\lib\help\Numeric;
+
+abstract class Model implements \cms\lib\interfaces\Model
 {
-    public function getPaginationData()
+    public function getPaginationData($intPage, $intPaginationNumber, $intRecCount, $strLink = "", $intShowPage = 3)
     {
-        // TODO: Implement getPaginationData() method.
-    }
-
-    public function buildPaginationLimit()
-    {
-        // TODO: Implement buildPaginationLimit() method.
-    }
-
-    public function pagination_data($intPage, $intPaginationNumber, $intRecCount, $strLink = "", $intShowPage = 3)
-    {
-        if(!(FM::is_variable($intPage)))
+        if(empty($intPage))
             $intPage = 1;
 
         $nextPage = $intPage+1;
         $previousPage = $intPage - 1;
-        $lastPage = Finteger::convert_to_integer(Finteger::ceil($intRecCount / $intPaginationNumber));
+        $lastPage = Numeric::convertToInteger(Numeric::ceil($intRecCount / $intPaginationNumber));
         $arrData['active'] = $intPage;
         $arrData['first'] = "$strLink" . "page=1";
         $arrData['last'] = "$strLink" . "page=$lastPage";
@@ -68,9 +62,9 @@ abstract class Cmodel implements \cms\lib\interfaces\Model
         return $arrData;
     }
 
-    public function bild_limit_pagination($intPage, $intItemForPage)
+    public function buildPaginationLimit($intPage, $intItemForPage)
     {
-        if(!(FM::is_variable($intPage)))
+        if(empty($intPage))
             $intPage = 1;
 
         return "LIMIT " . (($intPage - 1) * $intItemForPage ) . ", $intItemForPage";

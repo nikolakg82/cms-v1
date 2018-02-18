@@ -1,6 +1,8 @@
 <?php
 
-class CregistryAdmin
+namespace cms\lib\help;
+
+class RegistryAdmin
 {
     /**
      * @var - Poglavlja sa kontrolerima koji su aktivni
@@ -24,20 +26,20 @@ class CregistryAdmin
      *      );
      *
      */
-    private static $chapters;
+    protected static $chapters;
 
-    public static function add_controller($strChapter, $strChapterIcon, $strController, $arrData)
+    public static function addController($strChapter, $strChapterIcon, $strController, $arrData)
     {
         self::$chapters[$strChapter]['icon'] = $strChapterIcon;
         self::$chapters[$strChapter]['controllers'][$strController] = $arrData;
     }
 
-    public static function get_chapters()
+    public static function getChapters()
     {
         return self::$chapters;
     }
 
-//    public static function get_table_config($strController, $strTable)
+//    public static function getTableConfig($strController, $strTable)
 //    {
 //        if(FM::is_variable(self::$controllers[$strController]['tables'][$strTable]))
 //            return FM::includer(APP_CONFIG_ADMIN . "")

@@ -1,24 +1,32 @@
 <?php
 
+namespace cms\lib\abstracts;
+
+use cms\CMS;
+use cms\lib\help\ControllerLoader;
+use cms\lib\help\Lang;
+use fm\FM;
+use fm\lib\help\Request;
+
 abstract class CmsStart
 {
     public function __construct()
     {
-        CregistryController::set_curent_lang_controller(Ffetch::name('controller', FM_STRING, FM_GET));
+        ControllerLoader::setCurrentLangController(Request::name('controller', FM_STRING, FM_GET));
     }
 
     public function run()
     {
-        CMS::set_view();
-        CMS::set_site_domain();
-        CMS::set_global_config();
+        CMS::setView();
+        CMS::setSiteDomain();
+        CMS::setGlobalConfig();
 
         /* @TODO load controlera i ceo mvc uraditi malo drugacije, nema view klase to treba da ide u responser, model da ima loader
          *  mozda da bude i statican ali to i nije dobra ideja, bolje da ima loader za model
          */
-        $objController = CregistryController::load(CregistryController::get_current());
+        $objController = ControllerLoader::load(ControllerLoader::getCurrent());
 
-        $strView = Ffetch::name('view', FM_STRING, FM_GET);
+        $strView = Request::name('view', FM_STRING, FM_GET);
 
 //        var_dump($strView);
         /* @TODO kontroler treba da vrati neki view, treba da se napravi neki objekat response koji ce da ima tip
@@ -38,15 +46,15 @@ abstract class CmsStart
             CMS::$view->assign('data', $objResponse->getData());
             CMS::$view->display($objResponse->getTemplatePath());
 
-            CMS::$view->assign("lab", Clang::get_lab());
-            CMS::$view->assign("config", CMS::get_global_config());
-            CMS::$view->assign('domain', CMS::get_site_domain());
-            CMS::$view->assign('ch_lang', CregistryController::get_ch_lang());
-            CMS::$view->assign('lang', Clang::get_current());
-            CMS::$view->assign('controllers', CregistryController::get_cotrollers_path_from_lang());
-            CMS::$view->assign('controller', CregistryController::get_current());
-            CMS::$view->assign('admin_theme', CMS::get_admin_theme());
-            CMS::$view->assign('langs', Clang::get_lang());
+            CMS::$view->assign("lab", Lang::getLab());
+            CMS::$view->assign("config", CMS::getGlobalConfig());
+            CMS::$view->assign('domain', CMS::getSiteDomain());
+            CMS::$view->assign('ch_lang', ControllerLoader::getChLang());
+            CMS::$view->assign('lang', Lang::getCurrent());
+            CMS::$view->assign('controllers', ControllerLoader::getControllersPathFromLang());
+            CMS::$view->assign('controller', ControllerLoader::getCurrent());
+            CMS::$view->assign('admin_theme', CMS::getAdminTheme());
+            CMS::$view->assign('langs', Lang::getLang());
 
 
 

@@ -1,6 +1,15 @@
 <?php
 
-class Cmnews extends Cmodel
+namespace cms\lib\mvc\model;
+
+use cms\CMS;
+use cms\lib\abstracts\Model;
+use cms\lib\help\ControllerLoader;
+use cms\lib\help\Lang;
+use cms\lib\mvc\controller\ControllerNews;
+use fm\FM;
+
+class ModelNews extends Model
 {
     /**
      * Vraca niz sa vestima, ako je prosledjena kategorija, vraca podatke o samoj kategoriji i listu vesti za tu kategoriju, ako je prosledjena kolicina vraca taj broj vesti,
@@ -14,7 +23,7 @@ class Cmnews extends Cmodel
     {
         $arrData = null;
 
-        $strLink = "/" . CregistryController::get_name_key_lang(CMS_C_NEWS, Clang::get_current());
+        $strLink = "/" . ControllerLoader::getNameKeyLang(CMS_C_NEWS, Lang::getCurrent());
 
         $strSqlWhere = "";
         if(FM::is_variable($intCategoryId))
@@ -30,15 +39,15 @@ class Cmnews extends Cmodel
             $strSqlLimit = "LIMIT $intQuantity";
         else
         {
-            $strSql = "SELECT COUNT(n.id) FROM " . CMS::$db_prefix . "news n WHERE n.active = 'y'$strSqlWhere";
+            $strSql = "SELECT COUNT(n.id) FROM " . CMS::$dbPrefix . "news n WHERE n.active = 'y'$strSqlWhere";
             CMS::$db->query($strSql);
-            $intRecordData = CMS::$db->fetch_count();
+            $intRecordData = CMS::$db->fetchCount();
 
             if(FM::is_variable($intRecordData))
             {
-                $strLink .= "." . CMS::$view->get_type() . "?";
-                $arrData['pagination'] = $this->pagination_data(Cnews::$page, Cnews::$news_page, $intRecordData, $strLink);
-                $strSqlLimit = $this->bild_limit_pagination(Cnews::$page, Cnews::$news_page);
+                $strLink .= "." . CMS::$view->getType() . "?";
+                $arrData['pagination'] = $this->getPaginationData(ControllerNews::$page, ControllerNews::$news_page, $intRecordData, $strLink);
+                $strSqlLimit = $this->buildPaginationLimit(ControllerNews::$page, ControllerNews::$news_page);
             }
         }
 
@@ -50,7 +59,7 @@ class Cmnews extends Cmodel
 
         CMS::$db->query($strSql);
 
-        if(CMS::$db->row_count() > 0)
+        if(CMS::$db->rowCount() > 0)
             $arrData['news'] = CMS::$db->fetch();
 
         return $arrData;

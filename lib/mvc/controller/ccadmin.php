@@ -54,7 +54,7 @@ class Ccadmin extends Ccontroller
                 $this->get_model()->logout_user();
 
             CMS::$view->assign('user', $this->user);//Podaci korisnika
-            CMS::$view->assign('chapter_data', CregistryAdmin::get_chapters());//Raspodela tabela po kontrolerima i podela kotrolera
+            CMS::$view->assign('chapter_data', RegistryAdmin::getChapters());//Raspodela tabela po kontrolerima i podela kotrolera
 
             if(FM::is_variable(self::$con))//Ako je setovan controler ide se na prikaz liste ili formi za editovanje i dodavanje, u suprotnom se prikazuje pocetna strana
             {
@@ -95,7 +95,7 @@ class Ccadmin extends Ccontroller
                                     if($this->show == 'container')//Ako je show container, onda se prikazuje template sa tabovima koji ima iframe i on uvlaci odgovarajuci sadrzaj
                                     {
                                         $arrContainerData[0]['title'] = "Item";
-                                        $arrContainerData[0]['path'] = "/" . CregistryController::get_name_key_lang(CMS_C_ADMIN, Clang::get_current()) . ".html?con=" . self::$con . "&table=" . self::$table . "&action=" . $this->action . "&item_id=" . $this->id;
+                                        $arrContainerData[0]['path'] = "/" . ControllerLoader::get_name_key_lang(CMS_C_ADMIN, Clang::get_current()) . ".html?con=" . self::$con . "&table=" . self::$table . "&action=" . $this->action . "&item_id=" . $this->id;
 
                                         if(isset($arrTableFull[FM_SUBTABLES]))
                                         {
@@ -103,7 +103,7 @@ class Ccadmin extends Ccontroller
                                             {
                                                 $arrTableTemp = FM::includer(APP_CONFIG_ADMIN . $strTableChild . '.php', false);//Konfiguracioni niz pod tabele
                                                 if(FM::is_variable($arrTableTemp))
-                                                    $arrContainerData[] = array('title' => $arrTableTemp[FM_TITLE], 'path' => "/" . CregistryController::get_name_key_lang(CMS_C_ADMIN, Clang::get_current()) . ".html?con=" . self::$con . "&table=" . $strTableChild . "&item_sid=" . $this->id);
+                                                    $arrContainerData[] = array('title' => $arrTableTemp[FM_TITLE], 'path' => "/" . ControllerLoader::get_name_key_lang(CMS_C_ADMIN, Clang::get_current()) . ".html?con=" . self::$con . "&table=" . $strTableChild . "&item_sid=" . $this->id);
                                             }
                                         }
 
@@ -118,7 +118,7 @@ class Ccadmin extends Ccontroller
 
                                     if($this->action == 'new')//Prikaz forme za dodavanje novog itema
                                     {
-                                        $strFormAction = "/" . CregistryController::get_name_key_lang(CMS_C_ADMIN, Clang::get_current()) . ".html?con=" . self::$con . "&table=" . self::$table . "&action=new&func=send";//@TODO dinamicka putanja
+                                        $strFormAction = "/" . ControllerLoader::get_name_key_lang(CMS_C_ADMIN, Clang::get_current()) . ".html?con=" . self::$con . "&table=" . self::$table . "&action=new&func=send";//@TODO dinamicka putanja
 
                                         if(FM::is_variable($this->sid))
                                             $strFormAction .= "&item_sid=" . $this->sid;
@@ -167,7 +167,7 @@ class Ccadmin extends Ccontroller
                                         //
                                         $arrFormItemData = $this->get_model()->get_item_data(self::$table, $arrFormItemData, $this->id);
 
-                                        $strFormAction = "/" . CregistryController::get_name_key_lang(CMS_C_ADMIN, Clang::get_current()) . ".html?con=" . self::$con . "&table=" . self::$table . "&action=edit&func=send&item_id=" . $this->id;//@TODO dinamicka putanja
+                                        $strFormAction = "/" . ControllerLoader::get_name_key_lang(CMS_C_ADMIN, Clang::get_current()) . ".html?con=" . self::$con . "&table=" . self::$table . "&action=edit&func=send&item_id=" . $this->id;//@TODO dinamicka putanja
                                         if(FM::is_variable($this->sid))
                                             $strFormAction .= "&item_sid=" . $this->sid;
                                     }

@@ -49,7 +49,7 @@ class Cmadmin extends Cmodel
             FM::start_session('APP_ADMIN');
             FM::set_session_data('APP_ADMIN_USER', Farray::serialize($arrUserData));
 
-            FM::redirect("/" . CregistryController::get_name_key_lang(CMS_C_ADMIN, Clang::get_current()) . ".html");
+            FM::redirect("/" . ControllerLoader::get_name_key_lang(CMS_C_ADMIN, Clang::get_current()) . ".html");
         }
 
         return false;
@@ -61,7 +61,7 @@ class Cmadmin extends Cmodel
     public function logout_user()
     {
         FM::kill_session('APP_ADMIN_USER', 'APP_ADMIN');
-        FM::redirect("/" . CregistryController::get_name_key_lang(CMS_C_ADMIN, Clang::get_current()) . ".html");
+        FM::redirect("/" . ControllerLoader::get_name_key_lang(CMS_C_ADMIN, Clang::get_current()) . ".html");
     }
 
     /**
@@ -86,7 +86,7 @@ class Cmadmin extends Cmodel
 
             if($boolPagination)
             {
-                $strLink = "/" . CregistryController::get_name_key_lang(CMS_C_ADMIN, Clang::get_current()) . ".html?con=" . Cadmin::$con . "&table=" . $strTable;
+                $strLink = "/" . ControllerLoader::get_name_key_lang(CMS_C_ADMIN, Clang::get_current()) . ".html?con=" . Cadmin::$con . "&table=" . $strTable;
                 $strSql = "SELECT COUNT(id) FROM " . Cadmin::$table;
                 CMS::$db->query($strSql);
                 $intRecordData = CMS::$db->fetch_count();

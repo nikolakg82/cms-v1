@@ -23,7 +23,7 @@ class ControllerNews extends abstracts\Controller
 
         $objResponse = help\ClassLoader::load("Response");
 
-        if(FM::is_variable($this->get_path()))
+        if(FM::is_variable($this->getPath()))
         {
 //            if(isset($this->get_path()[CMS::$db_prefix . 'news']))
 //                $this->get_view()->one_news($this->get_path()[CMS::$db_prefix . 'news']);

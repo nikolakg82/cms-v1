@@ -8,38 +8,31 @@ use cms\lib\interfaces as Interfaces;
 
 abstract class Controller implements Interfaces\Controller
 {
-    private $model;
+    /**
+     * @var Interfaces\Model
+     */
+    protected $model;
 
-    private $view;
+    protected $view;
 
-    private $path;
+    protected $path;
 
-    public function set_model($objModel)
-    {
-        $this->model = $objModel;
-    }
-
-    public function set_view($objView)
+    public function setView($objView)
     {
         $this->view = $objView;
     }
 
-    public function set_path($strTable, $intId)
+    public function setPath($strTable, $intId)
     {
         $this->path[$strTable] = $intId;
     }
 
-    public function get_model()
-    {
-        return $this->model;
-    }
-
-    public function get_view()
+    public function getView()
     {
        return $this->view;
     }
 
-    public function get_path()
+    public function getPath()
     {
         return $this->path;
     }
