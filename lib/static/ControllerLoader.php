@@ -72,6 +72,7 @@ class ControllerLoader
      */
     public static function addController($strKey, $strPathMvc)
     {
+//    var_dump($strKey);
         ClassLoader::addClass('app\lib\mvc\model\Model' . ucfirst($strKey),
                                 $strPathMvc . "/model/Model" . ucfirst($strKey) . ".php", 'public',
                                 'cms\lib\mvc\model\Model' . ucfirst($strKey));
@@ -98,7 +99,9 @@ class ControllerLoader
             foreach(self::$controllers as $keyC => $valC)
             {
                 foreach($arrLang as $keyL => $valL)
+                {
                     self::$controllers[$keyC]['lang'][$keyL] = $arrControllers[$keyL][$keyC];
+                }
             }
         }
     }
@@ -114,7 +117,7 @@ class ControllerLoader
         {
             foreach($arrConfig as $key => $val)
             {
-                if(isset($val))
+                if(isset($val) && isset(self::$controllers[$key]))
                     self::$controllers[$key]['table'] = $val;
             }
         }
@@ -201,6 +204,7 @@ class ControllerLoader
      */
     public static function setCurrentLangController($strName)
     {
+//    var_dump(self::$controllers);
         foreach(self::$controllers as $keyC => $valC)
         {
             foreach($valC['lang'] as $keyL => $valL)

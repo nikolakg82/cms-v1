@@ -3,6 +3,7 @@
 namespace cms\lib\mvc\controller;
 
 use cms\lib\abstracts as abstracts;
+use fm\FM;
 use fm\lib\help as help;
 
 class ControllerNews extends abstracts\Controller
@@ -19,9 +20,9 @@ class ControllerNews extends abstracts\Controller
 
     public function run()
     {
-        self::$page = help\Ffetch::name('page');
+        self::$page = help\Request::name('page');
 
-        $objResponse = help\ClassLoader::load("Response");
+        $objResponse = help\ClassLoader::load("fm\lib\publisher\Response");
 
         if(FM::is_variable($this->getPath()))
         {

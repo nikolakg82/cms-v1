@@ -52,9 +52,9 @@ class ModelNews extends Model
         }
 
         $strSql = "SELECT n.id, n.code, m.path, n.date, m.title, m.text, m.picture
-                    FROM " . CMS::$db_prefix . "news n
-                    LEFT JOIN " . CMS::$db_prefix . "news_mlc m ON m.sid = n.id
-                    WHERE n.active = 'y'$strSqlWhere AND m.lang = '" . Clang::get_current() . "'
+                    FROM " . CMS::$dbPrefix . "news n
+                    LEFT JOIN " . CMS::$dbPrefix . "news_mlc m ON m.sid = n.id
+                    WHERE n.active = 'y'$strSqlWhere AND m.lang = '" . Lang::getCurrent() . "'
                     ORDER BY n.ordinance ASC, n.date DESC, n.id DESC $strSqlLimit";
 
         CMS::$db->query($strSql);
