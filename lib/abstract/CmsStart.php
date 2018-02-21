@@ -21,18 +21,13 @@ abstract class CmsStart
         CMS::setSiteDomain();
         CMS::setGlobalConfig();
 
-        /* @TODO load controlera i ceo mvc uraditi malo drugacije, nema view klase to treba da ide u responser, model da ima loader
-         *  mozda da bude i statican ali to i nije dobra ideja, bolje da ima loader za model
-         */
         $objController = ControllerLoader::load(ControllerLoader::getCurrent());
 
         $strView = Request::name('view', FM_STRING, FM_GET);
 
-//        var_dump($strView);
-        /* @TODO kontroler treba da vrati neki view, treba da se napravi neki objekat response koji ce da ima tip
-        *  responsa tako da ovde znamo sta cemo da rendamo, dal ce do da bude html, json, xml ...
-        *
-        */
+        if(empty($strView))
+            $strView = FM_HTML;
+
         $objResponse = $objController->run();
 
         if($strView == FM_JSON)
@@ -42,7 +37,6 @@ abstract class CmsStart
         }
         else
         {
-//        var_dump($objView['data']);
             CMS::$view->assign('data', $objResponse->getData());
             CMS::$view->display($objResponse->getTemplatePath());
 
@@ -55,8 +49,6 @@ abstract class CmsStart
             CMS::$view->assign('controller', ControllerLoader::getCurrent());
             CMS::$view->assign('admin_theme', CMS::getAdminTheme());
             CMS::$view->assign('langs', Lang::getLang());
-
-
 
             CMS::$view->show();
         }

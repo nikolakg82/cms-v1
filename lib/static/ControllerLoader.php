@@ -67,21 +67,21 @@ class ControllerLoader
     /**
      * Dodavanje kontrolera, putanja koja se prosledjuje je putanja do lokalnog MVC-a tj do MVC-a sajta
      * @param string $strKey
-     * @param  string $strPathMvc
+     * @param string $strPathMvc
+     * @param string $strExtendClassController
+     * @param string $strExtendClassModel
      * @throws \Exception
      */
-    public static function addController($strKey, $strPathMvc)
+    public static function addController($strKey, $strPathMvc, $strExtendClassController, $strExtendClassModel)
     {
 //    var_dump($strKey);
         ClassLoader::addClass('app\lib\mvc\model\Model' . ucfirst($strKey),
                                 $strPathMvc . "/model/Model" . ucfirst($strKey) . ".php", 'public',
-                                'cms\lib\mvc\model\Model' . ucfirst($strKey));
+                                            $strExtendClassModel);
 
         ClassLoader::addClass('app\lib\mvc\controller\Controller' . ucfirst($strKey),
                                 $strPathMvc . "/controller/Controller" . ucfirst($strKey) . ".php", 'public',
-                                'cms\lib\mvc\controller\Controller' . ucfirst($strKey));
-
-//        ClassLoader::addClass("V$strKey", $strPathMvc . "/view/v$strKey.php", 'public', "Cv$strKey");
+                                            $strExtendClassController);
 
         self::$controllers[$strKey] = array();
     }
@@ -132,14 +132,10 @@ class ControllerLoader
     public static function load($strKey)
     {
         $objController = ClassLoader::load('app\lib\mvc\controller\Controller' . ucfirst($strKey));
-        // @TODO model i view ne idu dinamicki load ka i kontroler, view se izbacuje skroz
-        $objModel = ClassLoader::load('cms\lib\mvc\model\Model' . ucfirst($strKey));
+        $objModel = ClassLoader::load('app\lib\mvc\model\Model' . ucfirst($strKey));
+        $objResponse = ClassLoader::load('fm\lib\publisher\Response');
 
-//        $objView = Floader::load("V$strKey");
-
-//        $objController->set_view($objView);
-        $objController->setModel($objModel);
-
+        $objController->setModel($objModel)->setResponse($objResponse);
 
         foreach(Lang::getLang() as $keyLang => $lang)
         {

@@ -1,10 +1,9 @@
 <?php
 
-// @TODO - napraviti interface za controler, da to bude kao fancy, a i ako neko resi da pravi svoj kontroler da ima interface za njega
-
 namespace cms\lib\abstracts;
 
 use cms\lib\interfaces as Interfaces;
+use fm\lib\publisher\Response;
 
 abstract class Controller implements Interfaces\Controller
 {
@@ -13,23 +12,18 @@ abstract class Controller implements Interfaces\Controller
      */
     protected $model;
 
-    protected $view;
+    /**
+     * @var Response
+     */
+    protected $response;
 
     protected $path;
-
-    public function setView($objView)
-    {
-        $this->view = $objView;
-    }
 
     public function setPath($strTable, $intId)
     {
         $this->path[$strTable] = $intId;
-    }
 
-    public function getView()
-    {
-       return $this->view;
+        return $this;
     }
 
     public function getPath()
@@ -40,6 +34,20 @@ abstract class Controller implements Interfaces\Controller
     public function setModel(Interfaces\Model $objModel)
     {
         $this->model = $objModel;
+
+        return $this;
+    }
+
+    public function setResponse(Response $objResponse)
+    {
+        $this->response = $objResponse;
+
+        return $this;
+    }
+
+    public function getResponse()
+    {
+        return $this->response;
     }
 
     public function getModel()

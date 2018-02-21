@@ -2,16 +2,15 @@
 
 namespace cms\lib\mvc\controller;
 
-use cms\lib\abstracts as abstracts;
-use fm\FM;
-use fm\lib\help as help;
+use cms\lib\abstracts\Controller;
+use fm\lib\help\Request;
 
-class ControllerNews extends abstracts\Controller
+class ControllerNews extends Controller
 {
     /**
      * @var int - Broj vesti po strani
      */
-    public static $news_page = 10;
+    public static $newsPage = 10;
 
     /**
      * @var int - Trenutna strana
@@ -20,11 +19,9 @@ class ControllerNews extends abstracts\Controller
 
     public function run()
     {
-        self::$page = help\Request::name('page');
+        self::$page = Request::name('page');
 
-        $objResponse = help\ClassLoader::load("fm\lib\publisher\Response");
-
-        if(FM::is_variable($this->getPath()))
+        if(!empty($this->getPath()))
         {
 //            if(isset($this->get_path()[CMS::$db_prefix . 'news']))
 //                $this->get_view()->one_news($this->get_path()[CMS::$db_prefix . 'news']);
@@ -33,14 +30,9 @@ class ControllerNews extends abstracts\Controller
         }
         else
         {
+            $arrNews = $this->getModel()->listItems();
 
-            $arrNews = $this->getModel()->list_items();
-
-            $objResponse = $objResponse->setData($arrNews)->setResponseCode(200)->setTemplatePath(CMS_C_NEWS . '/list_news.tpl');
-
-//            return ['data' => $arrNews, 'template' => CMS_C_NEWS . '/list_news.tpl'];
-//            var_dump($arrNews);
-//            $this->get_view()->list_news();
+            $objResponse = $this->getResponse()->setData($arrNews)->setResponseCode(200)->setTemplatePath(CMS_C_NEWS . '/list_news.tpl');
         }
 
         return $objResponse;
