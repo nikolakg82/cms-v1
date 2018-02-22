@@ -29,7 +29,7 @@ class ModelNews extends Model
         if(!empty($intCategoryId))
         {
             $strSqlWhere = " AND n.category_id = $intCategoryId";
-            $arrData['category'] = $this->category_list($intCategoryId);
+            $arrData['category'] = $this->categoryList($intCategoryId);
 
             $strLink .= "/" . $arrData['category']['path'];
         }

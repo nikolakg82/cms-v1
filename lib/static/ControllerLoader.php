@@ -160,7 +160,7 @@ class ControllerLoader
 
                     if(CMS::$db->rowCount() > 0)
                     {
-                        $objController->set_path($val, $arrDataTemp['sid']);
+                        $objController->setPath($val, $arrDataTemp['sid']);
 
                         if(isset(self::$chLang))
                         {
