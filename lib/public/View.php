@@ -1,57 +1,62 @@
 <?php
 
-class Cview
+namespace cms\lib\publisher;
+
+use fm\FM;
+use fm\lib\help\ClassLoader;
+
+class View
 {
     /**
      * @var - smarty objekat
      */
-    private $smarty;
+    protected $smarty;
 
     /**
      * @var - putanja do templejta
      */
-    private $theme;
+    protected $theme;
 
     /**
      * @var - putanja do smarty kesa
      */
-    private $cache;
+    protected $cache;
 
     /**
      * @var - putanja do smarty compile cache foldera
      */
-    private $theme_cache;
+    protected $themeCache;
 
     /**
      * @var - Tip prikaza, (HTML, XML, JSON)
      */
-    private $type = FM_HTML;
+    protected $type = FM_HTML;
 
     /**
      * @var - Potrebni podaci za assing u smarty
      */
-    private $data;
+    protected $data;
 
     /**
      * @var - putanja do templejta koji se prikazuje
      */
-    private $display_template;
+    protected $displayTemplate;
 
     //Seteri
 
-    public function set_theme($strPath)
+    public function setTheme($strPath)
     {
         $this->theme = $strPath;
     }
 
-    public function set_cache($strPath)
+    public function setCache($strPath)
     {
         $this->cache = $strPath;
     }
 
-    public function set_theme_cache($strPath)
+    public function setThemeCache($strPath)
     {
-        $this->theme_cache = $strPath;
+        $this->themeCache = $strPath;
     }
 
     /**
@@ -59,13 +64,13 @@ class Cview
      *
      * @param string $strType - Tip prikaza strane
      */
-    public function set_type($strType)
+    public function setType($strType)
     {
-        if(FM::is_variable($strType))
+        if(!empty($strType))
         {
             $arrTypes = FM::includer(CMS_CONFIG . 'view.php', false);
 
-            if(FM::is_variable($arrTypes))
+            if(isset($arrTypes))
             {
                 foreach($arrTypes as $val)
                 {
@@ -78,27 +83,27 @@ class Cview
 
     //Geteri
 
-    public function get_theme()
+    public function getTheme()
     {
         return $this->theme;
     }
 
-    public function get_cache()
+    public function getCache()
     {
         return $this->cache;
     }
 
-    public function get_theme_cache()
+    public function getThemeCache()
     {
-        return $this->theme_cache;
+        return $this->themeCache;
     }
 
-    public function get_type()
+    public function getType()
     {
         return $this->type;
     }
 
-    public function get_smarty()
+    public function getSmarty()
     {
         return $this->smarty;
     }
@@ -106,15 +111,15 @@ class Cview
     /**
      * Istanciranje smartija i podesavanje radnih foldra za smarty
      *
-     * @throws Exception
+     * @throws \Exception
      */
-    public function load_smarty()
+    public function loadSmarty()
     {
-        $this->smarty = Floader::load('SmartyBC');
+        $this->smarty = ClassLoader::load('SmartyBC');
 
-        $this->smarty->setTemplateDir($this->get_theme());
-        $this->smarty->setCompileDir($this->get_theme_cache());
-        $this->smarty->setCacheDir($this->get_cache());
+        $this->smarty->setTemplateDir($this->getTheme());
+        $this->smarty->setCompileDir($this->getThemeCache());
+        $this->smarty->setCacheDir($this->getCache());
     }
 
     /**
@@ -152,12 +157,12 @@ class Cview
      */
     public function display($strPath)
     {
-        if(isset($this->display_template))
+        if(isset($this->displayTemplate))
         {
             //@TODO Izbaciti notice u loger
         }
 
-        $this->display_template = $strPath;
+        $this->displayTemplate = $strPath;
     }
 
     /**
@@ -166,7 +171,7 @@ class Cview
      */
     public function show()
     {
-        if(FM::is_variable($this->data))
+        if(!empty($this->data))
         {
             foreach($this->data as $key => $val)
             {
@@ -176,10 +181,10 @@ class Cview
             unset($this->data);
         }
 
-        if(FM::is_variable($this->display_template))
+        if(!empty($this->displayTemplate))
         {
-            $this->smarty->display($this->display_template);//@TODO ubaciti u loger
-            unset($this->display_template);
+            $this->smarty->display($this->displayTemplate);//@TODO ubaciti u loger
+            unset($this->displayTemplate);
         }
     }
 
@@ -190,7 +195,7 @@ class Cview
      * @param $arrData - Podaci za prikaz
      * @param string $strKey - Kljuc pod kojim ce se asajnovati podaci, po defaultu je data
      */
-    public function show_data($strTheme, $arrData, $strKey = "data")
+    public function showData($strTheme, $arrData, $strKey = "data")
     {
         $this->assign($strKey, $arrData);
         $this->display($strTheme);

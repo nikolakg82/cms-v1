@@ -6,7 +6,14 @@
  * Date: 5/3/2016
  * Time: 2:11 PM
  */
-class CregistryController
+
+namespace cms\lib\help;
+
+use cms\CMS;
+use fm\lib\help\ClassLoader, fm\FM;
+use fm\lib\help\Request;
+
+class ControllerLoader
 {
     /**
      * @var array - Registar controlera
@@ -22,12 +29,12 @@ class CregistryController
      *                                                  ),
      *                  );
      */
-    private static $controllers;
+    protected static $controllers;
 
     /**
      * @var string - Kljuc trenutnog kontrolera
      */
-    private static $current;
+    protected static $current;
 
     /**
      * @var array - Niz za promenu jezika na sajtu
@@ -39,7 +46,7 @@ class CregistryController
      *                                       ),
      *                      );
      */
-    private static $ch_lang;
+    protected static $chLang;
 
 
     //Geteri
@@ -47,27 +54,34 @@ class CregistryController
      * Vraca trenutni kontroler
      * @return string
      */
-    public static function get_current()
+    public static function getCurrent()
     {
         return self::$current;
     }
 
-    public static function get_ch_lang()
+    public static function getChLang()
     {
-        return self::$ch_lang;
+        return self::$chLang;
     }
 
     /**
      * Dodavanje kontrolera, putanja koja se prosledjuje je putanja do lokalnog MVC-a tj do MVC-a sajta
      * @param string $strKey
-     * @param  string $strPathMvc
-     * @throws Exception
+     * @param string $strPathMvc
+     * @param string $strExtendClassController
+     * @param string $strExtendClassModel
+     * @throws \Exception
      */
-    public static function add_controller($strKey, $strPathMvc)
+    public static function addController($strKey, $strPathMvc, $strExtendClassController, $strExtendClassModel)
     {
-        Floader::add_class("M$strKey", $strPathMvc . "/model/m$strKey.php", 'public', "Cm$strKey");
-        Floader::add_class("C$strKey", $strPathMvc . "/controller/c$strKey.php", 'public', "Cc$strKey");
-        Floader::add_class("V$strKey", $strPathMvc . "/view/v$strKey.php", 'public', "Cv$strKey");
+//    var_dump($strKey);
+        ClassLoader::addClass('app\lib\mvc\model\Model' . ucfirst($strKey),
+                                $strPathMvc . "/model/Model" . ucfirst($strKey) . ".php", 'public',
+                                            $strExtendClassModel);
+
+        ClassLoader::addClass('app\lib\mvc\controller\Controller' . ucfirst($strKey),
+                                $strPathMvc . "/controller/Controller" . ucfirst($strKey) . ".php", 'public',
+                                            $strExtendClassController);
 
         self::$controllers[$strKey] = array();
     }
@@ -75,16 +89,16 @@ class CregistryController
     /**
      * Dodavanje MLC-a za kontrolere, za svaki kontroler se setuje kako se zove na kojem jeziku, podesavanje se vrsi iz konfiguracionog fajla
      */
-    public static function add_langs()
+    public static function addLang()
     {
-        $arrLangs = Clang::get_lang();
+        $arrLang = Lang::getLang();
         $arrControllers = FM::includer(APP_CONFIG . 'controller.php');
 
-        if(FM::is_variable($arrLangs) && FM::is_variable($arrControllers))
+        if(isset($arrLang) && isset($arrControllers))
         {
             foreach(self::$controllers as $keyC => $valC)
             {
-                foreach($arrLangs as $keyL => $valL)
+                foreach($arrLang as $keyL => $valL)
                 {
                     self::$controllers[$keyC]['lang'][$keyL] = $arrControllers[$keyL][$keyC];
                 }
@@ -95,15 +109,15 @@ class CregistryController
     /**
      * Dodavanje tabela svakom kontroleru
      */
-    public static function add_tables()
+    public static function addTables()
     {
         $arrConfig = FM::includer(APP_CONFIG . 'table.php');
 
-        if(FM::is_variable($arrConfig))
+        if(isset($arrConfig))
         {
             foreach($arrConfig as $key => $val)
             {
-                if(FM::is_variable($val))
+                if(isset($val) && isset(self::$controllers[$key]))
                     self::$controllers[$key]['table'] = $val;
             }
         }
@@ -114,51 +128,48 @@ class CregistryController
      * I bilduje linkove za zamenu jezika
      * @param string $strKey
      * @return object mixed
-     * @throws Exception
      */
     public static function load($strKey)
     {
-        $objController = Floader::load("C$strKey");
-        // @TODO model i view ne idu dinamicki load ka i kontroler, view se izbacuje skroz
-//        $objModel = Floader::load("M$strKey");
-//        $objView = Floader::load("V$strKey");
+        $objController = ClassLoader::load('app\lib\mvc\controller\Controller' . ucfirst($strKey));
+        $objModel = ClassLoader::load('app\lib\mvc\model\Model' . ucfirst($strKey));
+        $objResponse = ClassLoader::load('fm\lib\publisher\Response');
 
-//        $objController->set_view($objView);
-//        $objController->set_model($objModel);
+        $objController->setModel($objModel)->setResponse($objResponse);
 
-        foreach(Clang::get_lang() as $keyLang => $lang)
+        foreach(Lang::getLang() as $keyLang => $lang)
         {
-            if($keyLang != Clang::get_current())
-                self::$ch_lang[$keyLang]['path'] = "/" . self::get_name_key_lang(self::get_current(), $keyLang);
+            if($keyLang != Lang::getCurrent())
+                self::$chLang[$keyLang]['path'] = "/" . self::getNameKeyLang(self::getCurrent(), $keyLang);
 
-            self::$ch_lang[$keyLang]['name'] = Clang::get_lang($keyLang)['name'];
+            self::$chLang[$keyLang]['name'] = Lang::getLang($keyLang)['name'];
         }
 
-        $strPath = Ffetch::get('path');
-        if(FM::is_variable($strPath))
+        $strPath = Request::get('path');
+        if(isset($strPath))
         {
-            if(FM::is_variable(self::$controllers[$strKey]['table']))
+            if(isset(self::$controllers[$strKey]['table']))
             {
                 foreach(self::$controllers[$strKey]['table'] as $val)
                 {
-                    $strSql = "SELECT sid, path FROM " . $val ."_mlc WHERE path = :path AND lang = '" . Clang::get_current() . "' LIMIT 1";
+                    $strSql = "SELECT sid, path FROM " . $val ."_mlc WHERE path = :path AND lang = '" . Lang::getCurrent() . "' LIMIT 1";
                     $arrPrepare[":path"] = $strPath;
 
                     CMS::$db->query($strSql, $arrPrepare);
                     $arrDataTemp = CMS::$db->fetch(FM_FETCH_ASSOC, false);
 
-                    if(CMS::$db->row_count() > 0)
+                    if(CMS::$db->rowCount() > 0)
                     {
-                        $objController->set_path($val, $arrDataTemp['sid']);
+                        $objController->setPath($val, $arrDataTemp['sid']);
 
-                        if(FM::is_variable(self::$ch_lang))
+                        if(isset(self::$chLang))
                         {
-                            $strSql = "SELECT lang, path FROM " . $val ."_mlc WHERE sid = '" . $arrDataTemp['sid'] . "' AND lang != '" . Clang::get_current() . "'";
+                            $strSql = "SELECT lang, path FROM " . $val ."_mlc WHERE sid = '" . $arrDataTemp['sid'] . "' AND lang != '" . Lang::getCurrent() . "'";
                             CMS::$db->query($strSql);
                             $arrDataOtherLang = CMS::$db->fetch(FM_FETCH_KEY_PAIR);
-                            if(CMS::$db->row_count() > 0)
+                            if(CMS::$db->rowCount() > 0)
                             {
-                                foreach(self::$ch_lang as $keyData => &$valData)
+                                foreach(self::$chLang as $keyData => &$valData)
                                 {
                                     if(isset($valData['path']) && isset($arrDataOtherLang[$keyData]))
                                         $valData['path'] .= "/" . $arrDataOtherLang[$keyData];
@@ -171,15 +182,12 @@ class CregistryController
             }
         }
 
-        if(FM::is_variable(self::$ch_lang))
+        if(isset(self::$chLang))
         {
-            foreach(self::$ch_lang as &$val)
+            foreach(self::$chLang as &$val)
             {
-                if(isset($val['path']))
-                {
-                    if(FM::is_variable($val['path']) && $val['path'] != "/")
-                        $val['path'] .= "." . CMS::$view->get_type();
-                }
+                if(isset($val['path']) && $val['path'] != "/")
+                    $val['path'] .= "." . CMS::$view->getType();
             }
         }
 
@@ -190,15 +198,16 @@ class CregistryController
      * u odnosu na naziv kontrolera onoga sto pise u url-u setuje se jezik i setuje se kontroler
      * @param string $strName
      */
-    public static function set_curent_lang_controller($strName)
+    public static function setCurrentLangController($strName)
     {
+//    var_dump(self::$controllers);
         foreach(self::$controllers as $keyC => $valC)
         {
             foreach($valC['lang'] as $keyL => $valL)
             {
                 if($strName == $valL)
                 {
-                    Clang::set_current($keyL);
+                    Lang::setCurrent($keyL);
                     self::$current = $keyC;
                 }
             }
@@ -209,31 +218,31 @@ class CregistryController
      *
      * @return array
      */
-    public static function get_cotrollers_path_from_lang()
+    public static function getControllersPathFromLang()
     {
         $arrData = null;
 
         foreach(self::$controllers as $key => $val)
-            $arrData[$key] = $val['lang'][Clang::get_current()];
+            $arrData[$key] = $val['lang'][Lang::getCurrent()];
 
         return $arrData;
     }
 
-    public static function get_name_key_lang($strKey, $strLang)
+    public static function getNameKeyLang($strKey, $strLang)
     {
         $strName = null;
 
-        if(FM::is_variable(self::$controllers[$strKey]['lang'][$strLang]))
+        if(isset(self::$controllers[$strKey]['lang'][$strLang]))
             $strName = self::$controllers[$strKey]['lang'][$strLang];
 
         return $strName;
     }
 
-    public static function get_controllers($strKey = null)
+    public static function getControllers($strKey = null)
     {
         $arrData = null;
 
-        if(FM::is_variable($strKey))
+        if(isset($strKey))
         {
             if(isset(self::$controllers[$strKey]))
                 $arrData = self::$controllers[$strKey];

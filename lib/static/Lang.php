@@ -6,22 +6,27 @@
  * Date: 5/3/2016
  * Time: 2:16 PM
  */
-class Clang
+
+namespace cms\lib\help;
+
+use fm\FM;
+
+class Lang
 {
     /**
      * @var string - Default jezik
      */
-    private static $default = 'SR';
+    protected static $default = 'SR';
 
     /**
      * @var string - Trenutni jezik na sajtu
      */
-    private static $current;
+    protected static $current;
 
     /**
      * @var array - Labele
      */
-    private static $lab = array();
+    protected static $lab = array();
 
     /**
      * Niz sa aktivnim jezicima
@@ -32,51 +37,51 @@ class Clang
      *                                  )
      *          )
      */
-    private static $lang = array();
+    protected static $lang = array();
 
     //Seteri
-    public static function set_default($strLangKey)
+    public static function setDefault($strLangKey)
     {
-        if(FM::is_variable(self::$lang[$strLangKey]))
+        if(isset(self::$lang[$strLangKey]))
             self::$default = $strLangKey;
     }
 
-    public static function set_current($strLangKey)
+    public static function setCurrent($strLangKey)
     {
-        if(FM::is_variable(self::$lang[$strLangKey]))
+        if(isset(self::$lang[$strLangKey]))
             self::$current = $strLangKey;
         else
-            self::$current = self::get_default();
+            self::$current = self::getDefault();
 
-        self::set_lab(FM::includer(APP_LAB . self::get_current() . ".php"));
+        self::setLab(FM::includer(APP_LAB . self::getCurrent() . ".php"));
     }
 
-    public static function set_lab($arrLab)
+    public static function setLab($arrLab)
     {
         self::$lab = $arrLab;
     }
 
 
     //Geteri
-    public static function get_default()
+    public static function getDefault()
     {
         return self::$default;
     }
 
-    public static function get_current()
+    public static function getCurrent()
     {
         return self::$current;
     }
 
-    public static function get_lab()
+    public static function getLab()
     {
         return self::$lab;
     }
 
-    public static function get_lang($strKey = null)
+    public static function getLang($strKey = null)
     {
         $mixReturn = self::$lang;
-        if(FM::is_variable($strKey))
+        if(isset($strKey))
             $mixReturn = self::$lang[$strKey];
 
         return $mixReturn;
@@ -88,7 +93,7 @@ class Clang
      * @param string $strLangKey - Kljuc jezika
      * @param string $strLangName - Naziv jezika
      */
-    public static function add_lang($strLangKey, $strLangName)
+    public static function addLang($strLangKey, $strLangName)
     {
         self::$lang[$strLangKey]['name'] = $strLangName;
     }

@@ -37,7 +37,7 @@ class Cmadmin extends Cmodel
     {
         $arrUserData = null;
 
-        if($strUsername == $this->default_user['username'] && Fstring::md5($strPassword) == $this->password)
+        if($strUsername == $this->default_user['username'] && Stringer::md5($strPassword) == $this->password)
         {
             $arrUserData = $this->default_user;
 
@@ -49,7 +49,7 @@ class Cmadmin extends Cmodel
             FM::start_session('APP_ADMIN');
             FM::set_session_data('APP_ADMIN_USER', Farray::serialize($arrUserData));
 
-            FM::redirect("/" . CregistryController::get_name_key_lang(CMS_C_ADMIN, Clang::get_current()) . ".html");
+            FM::redirect("/" . ControllerLoader::get_name_key_lang(CMS_C_ADMIN, Clang::get_current()) . ".html");
         }
 
         return false;
@@ -61,7 +61,7 @@ class Cmadmin extends Cmodel
     public function logout_user()
     {
         FM::kill_session('APP_ADMIN_USER', 'APP_ADMIN');
-        FM::redirect("/" . CregistryController::get_name_key_lang(CMS_C_ADMIN, Clang::get_current()) . ".html");
+        FM::redirect("/" . ControllerLoader::get_name_key_lang(CMS_C_ADMIN, Clang::get_current()) . ".html");
     }
 
     /**
@@ -86,7 +86,7 @@ class Cmadmin extends Cmodel
 
             if($boolPagination)
             {
-                $strLink = "/" . CregistryController::get_name_key_lang(CMS_C_ADMIN, Clang::get_current()) . ".html?con=" . Cadmin::$con . "&table=" . $strTable;
+                $strLink = "/" . ControllerLoader::get_name_key_lang(CMS_C_ADMIN, Clang::get_current()) . ".html?con=" . Cadmin::$con . "&table=" . $strTable;
                 $strSql = "SELECT COUNT(id) FROM " . Cadmin::$table;
                 CMS::$db->query($strSql);
                 $intRecordData = CMS::$db->fetch_count();
@@ -117,7 +117,7 @@ class Cmadmin extends Cmodel
                              foreach($arrField['join']['where_join'] as $strKeyJoin => $strValJoin)
                                  $strSqlJoin .= $strJoinTableAlias . $intJoinTableAliasCounter . "." . $strKeyJoin . " = " . $strValJoin . " AND ";
 
-                             $strSqlJoin = Fstring::substr($strSqlJoin, 0, -5);
+                             $strSqlJoin = Stringer::substr($strSqlJoin, 0, -5);
 
                              $strSqlJoin .= ") ";
                          }
@@ -137,7 +137,7 @@ class Cmadmin extends Cmodel
 //                }
             }
 
-            $strSqlSelect = Fstring::substr($strSqlSelect, 0, -1);
+            $strSqlSelect = Stringer::substr($strSqlSelect, 0, -1);
 
             $strSql = "SELECT $strSqlSelect FROM " . $strTable . " AS $strTableAlias $strSqlJoin";
 
@@ -148,7 +148,7 @@ class Cmadmin extends Cmodel
 
             if(FM::is_variable($strSqlWhere))
             {
-                $strSqlWhere = Fstring::substr($strSqlWhere, 0, -5);
+                $strSqlWhere = Stringer::substr($strSqlWhere, 0, -5);
                 $strSqlWhere = "WHERE $strSqlWhere";
             }
 
@@ -202,7 +202,7 @@ class Cmadmin extends Cmodel
             foreach($arrWhere as $key => $val)
                 $strSql .= $key . " = " . $val . " AND ";
 
-            $strSql = Fstring::substr($strSql, 0, -5);
+            $strSql = Stringer::substr($strSql, 0, -5);
         }
 
         CMS::$db->query($strSql);
@@ -238,7 +238,7 @@ class Cmadmin extends Cmodel
             }
         }
 
-        $strSql = Fstring::substr($strSql, 0, -1);
+        $strSql = Stringer::substr($strSql, 0, -1);
 
 
         if(FM::is_variable($strSql))
@@ -283,7 +283,7 @@ class Cmadmin extends Cmodel
 
         if(FM::is_variable($strSql))
         {
-            $strSql = Fstring::substr($strSql, 0, -1);
+            $strSql = Stringer::substr($strSql, 0, -1);
 
             $strSql = "SELECT $strSql FROM $strTable";
 
