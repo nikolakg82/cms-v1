@@ -12,6 +12,7 @@ namespace cms\lib\help;
 use cms\CMS;
 use fm\lib\help\ClassLoader, fm\FM;
 use fm\lib\help\Request;
+use fm\lib\help\Router;
 
 class ControllerLoader
 {
@@ -26,6 +27,13 @@ class ControllerLoader
      *                                                      'table' => array(
      *                                                                          'Naziv tabele'
      *                                                                       ),
+     *                                                      'routes' => array(
+     *                                                                          'route_path'    => array(
+     *                                                                                                     'method' => 'request method',
+     *                                                                                                     'function' => 'controller's method name'
+     *                                                                                                   ),
+     *                                                                        ),
+     * ),
      *                                                  ),
      *                  );
      */
@@ -129,7 +137,7 @@ class ControllerLoader
      * @param string $strKey
      * @return object mixed
      */
-    public static function load($strKey)
+    public static function load($strKey, $boolRouter = false)
     {
         $objController = ClassLoader::load('app\lib\mvc\controller\Controller' . ucfirst($strKey));
         $objModel = ClassLoader::load('app\lib\mvc\model\Model' . ucfirst($strKey));
@@ -145,7 +153,11 @@ class ControllerLoader
             self::$chLang[$keyLang]['name'] = Lang::getLang($keyLang)['name'];
         }
 
+        if($boolRouter)
+            $strRoute = "/";
+
         $strPath = Request::get('path');
+
         if(isset($strPath))
         {
             if(isset(self::$controllers[$strKey]['table']))
@@ -191,7 +203,20 @@ class ControllerLoader
             }
         }
 
-        return $objController;
+        if(isset($strRoute))
+        {
+            if(isset(self::$controllers[$strKey]['routes'][$strRoute][FM::requestMethod()]))
+            {
+                $strName = self::$controllers[$strKey]['routes'][$strRoute][FM::requestMethod()]['function'];
+                $objReturn = $objController->$strName();
+            }
+            else
+                $objReturn = $objResponse->setResponseCode(404)->setTemplatePath(CMS_C_STRUCTURE . '/404.tpl');
+        }
+        else
+            $objReturn = $objController;
+
+        return $objReturn;
     }
 
     /**
@@ -212,6 +237,29 @@ class ControllerLoader
                 }
             }
         }
+    }
+
+    public static function setRoutes()
+    {
+        foreach(self::$controllers as $key => $val)
+        {
+            $arrRoutes = Router::getRoutesFromController($key);
+
+            if(isset($arrRoutes))
+            {
+                foreach($arrRoutes as $strRoute => $arrRouteData)
+                {
+                    foreach($arrRouteData as $strMethod => $arrDetails)
+                    {
+                        self::$controllers[$key]['routes'][$strRoute][$strMethod] = array(
+                                                            'function' => $arrDetails['function']
+                                                            );
+                    }
+                }
+            }
+        }
+
+//        var_dump(self::$controllers);
     }
 
     /**

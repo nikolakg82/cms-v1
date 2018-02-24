@@ -24,6 +24,7 @@ abstract class CmsStart
     public function __construct()
     {
         ControllerLoader::setCurrentLangController(Request::name('controller', FM_STRING, FM_GET));
+        ControllerLoader::setRoutes();
     }
 
     public function run()
@@ -36,9 +37,11 @@ abstract class CmsStart
 
         if(empty($strView))
             $strView = FM_HTML;
+//var_dump($_SERVER['REQUEST_METHOD']);
+//var_dump(ControllerLoader::getCurrent());
 
-        $this->activeController = ControllerLoader::load(ControllerLoader::getCurrent());
-        $this->response = $this->activeController->run();
+        $this->response = ControllerLoader::load(ControllerLoader::getCurrent(), true);
+//        $this->response = $this->activeController->run();
 
         $arrResponseCode = FM::includer(FM_CONFIG . 'responseCode.php', false);
 
