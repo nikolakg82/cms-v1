@@ -22,12 +22,22 @@ class ControllerNews extends Controller
     {
         $arrNews = $this->getModel()->listItems();
 
-        $objResponse = $this->getResponse()->setData($arrNews)->setResponseCode(200)->setTemplatePath(CMS_C_NEWS . '/list_news.tpl');
-
-        return $objResponse;
+        return $this->getResponse()->setData($arrNews)->setResponseCode(200)->setTemplatePath(CMS_C_NEWS . '/list_news.tpl');
     }
 
     public function create()
+    {
+        return $this->getResponse()->setData("test")->setResponseCode(201)->setTemplatePath(CMS_C_NEWS . '/one_news.tpl');
+    }
+
+    public function categoryList()
+    {
+        $arrData = $this->getModel()->categoryList();
+
+        return $this->getResponse()->setData($arrData)->setResponseCode(200)->setTemplatePath(CMS_C_NEWS . '/box_category_news.tpl');
+    }
+
+    public function categoryShow()
     {
 
     }
