@@ -314,6 +314,7 @@ class ControllerLoader
             if(isset($arrRouteData))
             {
                 $strFunctionName = $arrRouteData['function'];
+                //@TODO uraditi autorizaciju rute (guest, user, admin)
 
                 $objReturn = $objController->$strFunctionName();
             }

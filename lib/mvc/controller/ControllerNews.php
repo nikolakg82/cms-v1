@@ -39,7 +39,32 @@ class ControllerNews extends Controller
 
     public function categoryShow()
     {
+        return $this->getResponse()->setData("categories Show")->setResponseCode(200)->setTemplatePath(CMS_C_NEWS . '/box_category_news.tpl');
+    }
 
+    public function categoryCreate()
+    {
+        return $this->getResponse()->setData("category Create")->setResponseCode(200)->setTemplatePath(CMS_C_NEWS . '/box_category_news.tpl');
+    }
+
+    public function categoryUpdate()
+    {
+        return $this->getResponse()->setData("Category Update")->setResponseCode(200)->setTemplatePath(CMS_C_NEWS . '/box_category_news.tpl');
+    }
+
+    public function categoryDelete()
+    {
+        return $this->getResponse()->setData("Category delete")->setResponseCode(200)->setTemplatePath(CMS_C_NEWS . '/box_category_news.tpl');
+    }
+
+    public function newsUpdate()
+    {
+        return $this->getResponse()->setData("News Update")->setResponseCode(200)->setTemplatePath(CMS_C_NEWS . '/box_category_news.tpl');
+    }
+
+    public function newsDelete()
+    {
+        return $this->getResponse()->setData("News delete")->setResponseCode(200)->setTemplatePath(CMS_C_NEWS . '/box_category_news.tpl');
     }
 
     public function run()
