@@ -20,6 +20,8 @@ class ControllerNews extends Controller
 
     public function index()
     {
+        self::$page = Request::name('page');
+
         $arrNews = $this->getModel()->listItems();
 
         return $this->getResponse()->setData($arrNews)->setResponseCode(200)->setTemplatePath(CMS_C_NEWS . '/list_news.tpl');

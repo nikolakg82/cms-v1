@@ -29,6 +29,8 @@ class CMS
      */
     public static $view;
 
+    public static $viewFormat = FM_HTML;
+
     public static $dbPrefix;
 
     public static $userPermission = CMS_GUEST;
