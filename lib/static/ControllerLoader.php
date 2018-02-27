@@ -314,9 +314,11 @@ class ControllerLoader
             if(isset($arrRouteData))
             {
                 $strFunctionName = $arrRouteData['function'];
-                //@TODO uraditi autorizaciju rute (guest, user, admin)
 
-                $objReturn = $objController->$strFunctionName();
+                if(CMS::$userPermission & $arrRouteData['permission'])
+                    $objReturn = $objController->$strFunctionName();
+                else
+                    $objReturn = $objResponse->setResponseCode(401)->setTemplatePath(CMS_C_STRUCTURE . '/401.tpl');
             }
             else
                 $objReturn = $objResponse->setResponseCode(404)->setTemplatePath(CMS_C_STRUCTURE . '/404.tpl');

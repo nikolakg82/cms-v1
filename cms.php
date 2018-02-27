@@ -31,6 +31,10 @@ class CMS
 
     public static $dbPrefix;
 
+    public static $userPermission = CMS_GUEST;
+
+    public static $user;
+
     protected static $siteDomain;
 
     /**
