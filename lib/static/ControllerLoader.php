@@ -351,23 +351,24 @@ class ControllerLoader
 
     public static function setRoutes()
     {
-        foreach(self::$controllers as $key => $val)
-        {
-            $arrRoutes = Router::getRoutesFromController($key);
-
-            if(isset($arrRoutes))
-            {
-                foreach($arrRoutes as $strRoute => $arrRouteData)
-                {
-                    foreach($arrRouteData as $strMethod => $arrDetails)
-                    {
-                        self::$controllers[$key]['routes'][$strRoute][$strMethod] = array(
-                                                            'function' => $arrDetails['function']
-                                                            );
-                    }
-                }
-            }
-        }
+        //@TODO - ovo videti gde se sve koristi, ovaj metod bi verovatno trebalo obrisati, rute se vise ne pakuju u kontroler imaju zasebni logiku
+//        foreach(self::$controllers as $key => $val)
+//        {
+//            $arrRoutes = Router::getRoutesFromController($key);
+//
+//            if(isset($arrRoutes))
+//            {
+//                foreach($arrRoutes as $strRoute => $arrRouteData)
+//                {
+//                    foreach($arrRouteData as $strMethod => $arrDetails)
+//                    {
+//                        self::$controllers[$key]['routes'][$strRoute][$strMethod] = array(
+//                                                            'function' => $arrDetails['function']
+//                                                            );
+//                    }
+//                }
+//            }
+//        }
 
 //        var_dump(self::$controllers);
     }
