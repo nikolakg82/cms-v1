@@ -309,6 +309,8 @@ class ControllerLoader
                 }
             }
 
+            FM::includer(APP_ROUTES . $strKey . ".php");
+
             $arrRouteData = Router::getRouteDetails($strKey, $strRoute);
 
             if(isset($arrRouteData))
@@ -316,7 +318,13 @@ class ControllerLoader
                 $strFunctionName = $arrRouteData['function'];
 
                 if(CMS::$userPermission & $arrRouteData['permission'])
-                    $objReturn = $objController->$strFunctionName();
+                {
+//                    $objReturn = $objController->$strFunctionName();
+                    if(!isset($arrRouteData['params']))
+                        $arrRouteData['params'] = array();
+
+                    $objReturn = call_user_func_array(array($objController, $strFunctionName), $arrRouteData['params']);
+                }
                 else
                     $objReturn = $objResponse->setResponseCode(401)->setTemplatePath(CMS_C_STRUCTURE . '/401.tpl');
             }

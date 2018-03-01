@@ -18,9 +18,12 @@ class ControllerNews extends Controller
      */
     public static $page;
 
-    public function index()
+    public function index($intPage = null, $intPerPage = null)
     {
-        self::$page = Request::name('page');
+        self::$page = $intPage;
+
+        if(isset($intPerPage))
+            self::$newsPage = $intPerPage;
 
         $arrNews = $this->getModel()->listItems();
 
