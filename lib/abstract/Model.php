@@ -6,6 +6,15 @@ use fm\lib\help\Numeric;
 
 abstract class Model implements \cms\lib\interfaces\Model
 {
+    /**
+     * @param $intPage
+     * @param $intPaginationNumber
+     * @param $intRecCount
+     * @param string $strLink
+     * @param int $intShowPage
+     * @return mixed
+     * @TODO sve sto ima u getu treba i da ostane u getu, ovde treba da se iz geta sve i dalje prosledjuje u get
+     */
     public function getPaginationData($intPage, $intPaginationNumber, $intRecCount, $strLink = "", $intShowPage = 3)
     {
         if(empty($intPage))
