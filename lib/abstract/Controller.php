@@ -54,9 +54,4 @@ abstract class Controller implements Interfaces\Controller
     {
         return $this->model;
     }
-
-    public function run()
-    {
-        // TODO: Implement run() method.
-    }
 }

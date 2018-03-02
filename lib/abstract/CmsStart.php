@@ -24,7 +24,6 @@ abstract class CmsStart
     public function __construct()
     {
         ControllerLoader::setCurrentLangController(Request::name('controller', FM_STRING, FM_GET));
-        ControllerLoader::setRoutes();
     }
 
     public function run()

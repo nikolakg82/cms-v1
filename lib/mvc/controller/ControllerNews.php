@@ -52,30 +52,32 @@ class ControllerNews extends Controller
         return $this->getResponse()->setData("category Create")->setResponseCode(200)->setTemplatePath(CMS_C_NEWS . '/box_category_news.tpl');
     }
 
-    public function categoryUpdate()
+    public function categoryUpdate($intId)
     {
-        return $this->getResponse()->setData("Category Update")->setResponseCode(200)->setTemplatePath(CMS_C_NEWS . '/box_category_news.tpl');
+        return $this->getResponse()->setData("Category $intId Update")->setResponseCode(200)->setTemplatePath(CMS_C_NEWS . '/box_category_news.tpl');
     }
 
-    public function categoryDelete()
+    public function categoryDelete($intId)
     {
-        return $this->getResponse()->setData("Category delete")->setResponseCode(200)->setTemplatePath(CMS_C_NEWS . '/box_category_news.tpl');
+        return $this->getResponse()->setData("Category $intId delete")->setResponseCode(200)->setTemplatePath(CMS_C_NEWS . '/box_category_news.tpl');
     }
 
-    public function newsUpdate()
+    public function newsUpdate($intId)
     {
-        return $this->getResponse()->setData("News Update")->setResponseCode(200)->setTemplatePath(CMS_C_NEWS . '/box_category_news.tpl');
+        return $this->getResponse()->setData("News $intId Update")->setResponseCode(200)->setTemplatePath(CMS_C_NEWS . '/box_category_news.tpl');
     }
 
-    public function newsDelete()
+    public function newsDelete($intId)
     {
-        return $this->getResponse()->setData("News delete")->setResponseCode(200)->setTemplatePath(CMS_C_NEWS . '/box_category_news.tpl');
+        return $this->getResponse()->setData("News $intId delete")->setResponseCode(200)->setTemplatePath(CMS_C_NEWS . '/box_category_news.tpl');
     }
 
-    public function run()
+    public function run($strPath, $intPage = null, $intPerPage = null)
     {
-        self::$page = Request::name('page');
-        $strPath = Request::get('path');
+        self::$page = $intPage;
+
+        if(isset($intPerPage))
+            self::$newsPage = $intPerPage;
 
         $objResponse = $this->getResponse()->setResponseCode(404)->setTemplatePath(CMS_C_STRUCTURE . '/404.tpl');
 

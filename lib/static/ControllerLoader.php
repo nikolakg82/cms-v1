@@ -167,137 +167,38 @@ class ControllerLoader
             {
                 $strRoute = "/$strPath";
 
-//                $arrTemp = explode("/", $strPath);
-//
-//                $boolSetRoute = false;
-//                foreach(self::$controllers[$strKey]['routes'] as $route => $routeVal)
-//                {
-//                    $stringRoute = Stringer::subStr($route, 1);
-//
-//                    if(!empty($stringRoute))
-//                    {
-//                        $arrRoute = explode("/", Stringer::subStr($route, 1));
-//
-//                        foreach($arrRoute as $keyRoute => $oneRoute)
-//                        {
-//                            if(!Stringer::findCharacter($oneRoute, "?"))
-//                            {
-//                                if(!isset($arrTemp[$keyRoute]))
-//                                {
-//                                    $boolSetRoute = false;
-//                                    break;
-//                                }
-//                            }
-//                            else
-//                                $oneRoute = Stringer::strReplace($oneRoute, "?", "");
-//
-//                            $regex = '/{(.*)}/';
-//                            preg_match_all($regex, $oneRoute, $matches);
-//
-//                            if(!empty($matches[1]))
-//                            {
-//                                $strParameterType = FM_STRING;
-//
-//                                $arrTypeTemp = explode("|", $matches[1][0]);
-//
-//                                if(isset($arrTypeTemp[1]))
-//                                    $strParameterType = $arrTypeTemp[1];
-//
-//                                if(isset($arrTemp[$keyRoute]))
-//                                {
-//                                    if($strParameterType == FM_INTEGER)
-//                                    {
-//                                        $tempVal = Numeric::intVal($arrTemp[$keyRoute]);
-//
-//                                        if(Numeric::isInt($tempVal))
-//                                        {
-//                                            $boolSetRoute = true;
-//                                        }
-//                                        else
-//                                        {
-//                                            $boolSetRoute = false;
-//                                            break;
-//                                        }
-//
-//                                    }
-//                                    elseif($strParameterType == FM_STRING)
-//                                    {
-//                                        if(Stringer::isString($arrTemp[$keyRoute]))
-//                                            $boolSetRoute = true;
-//                                    }
-//                                }
-//                            }
-//                            else
-//                            {
-//                                if($oneRoute != $arrTemp[$keyRoute])
-//                                {
-//                                    $boolSetRoute = false;
-//                                    break;
-//                                }
-//                                else
-//                                {
-//                                    $boolSetRoute = true;
-//                                }
-//                            }
-//
-//                        }
-//
-//                        if($boolSetRoute)
-//                        {
-//                            $activeRoute = $route;
-//                            break;
-//                        }
-//                    }
-//                }
-
-//                if(isset($activeRoute))
-//                    $strRoute = $activeRoute;
-//                else
-//                    var_dump("555");
-
-//                die();
-
-
-
-//                if(isset(self::$controllers[$strKey]['routes'][$activeRoute][FM::requestMethod()]))
-//                {
-//                    $strRoute = "/$strPath";
-//                }
-//                else
-//                {
-                    if(isset(self::$controllers[$strKey]['table']))
+                if(isset(self::$controllers[$strKey]['table']))
+                {
+                    foreach(self::$controllers[$strKey]['table'] as $val)
                     {
-                        foreach(self::$controllers[$strKey]['table'] as $val)
+                        $strSql = "SELECT sid, path FROM " . $val ."_mlc WHERE path = :path AND lang = '" . Lang::getCurrent() . "' LIMIT 1";
+                        $arrPrepare[":path"] = $strPath;
+
+                        CMS::$db->query($strSql, $arrPrepare);
+                        $arrDataTemp = CMS::$db->fetch(FM_FETCH_ASSOC, false);
+
+                        if(CMS::$db->rowCount() > 0)
                         {
-                            $strSql = "SELECT sid, path FROM " . $val ."_mlc WHERE path = :path AND lang = '" . Lang::getCurrent() . "' LIMIT 1";
-                            $arrPrepare[":path"] = $strPath;
+                            $objController->setPath($val, $arrDataTemp['sid']);
 
-                            CMS::$db->query($strSql, $arrPrepare);
-                            $arrDataTemp = CMS::$db->fetch(FM_FETCH_ASSOC, false);
-
-                            if(CMS::$db->rowCount() > 0)
+                            if(isset(self::$chLang))
                             {
-                                $objController->setPath($val, $arrDataTemp['sid']);
-
-                                if(isset(self::$chLang))
+                                $strSql = "SELECT lang, path FROM " . $val ."_mlc WHERE sid = '" . $arrDataTemp['sid'] . "' AND lang != '" . Lang::getCurrent() . "'";
+                                CMS::$db->query($strSql);
+                                $arrDataOtherLang = CMS::$db->fetch(FM_FETCH_KEY_PAIR);
+                                if(CMS::$db->rowCount() > 0)
                                 {
-                                    $strSql = "SELECT lang, path FROM " . $val ."_mlc WHERE sid = '" . $arrDataTemp['sid'] . "' AND lang != '" . Lang::getCurrent() . "'";
-                                    CMS::$db->query($strSql);
-                                    $arrDataOtherLang = CMS::$db->fetch(FM_FETCH_KEY_PAIR);
-                                    if(CMS::$db->rowCount() > 0)
+                                    foreach(self::$chLang as $keyData => &$valData)
                                     {
-                                        foreach(self::$chLang as $keyData => &$valData)
-                                        {
-                                            if(isset($valData['path']) && isset($arrDataOtherLang[$keyData]))
-                                                $valData['path'] .= "/" . $arrDataOtherLang[$keyData];
-                                        }
+                                        if(isset($valData['path']) && isset($arrDataOtherLang[$keyData]))
+                                            $valData['path'] .= "/" . $arrDataOtherLang[$keyData];
                                     }
                                 }
-                                break;
                             }
+                            break;
                         }
                     }
-//                }
+                }
             }
 
             if(isset(self::$chLang))
@@ -319,7 +220,6 @@ class ControllerLoader
 
                 if(CMS::$userPermission & $arrRouteData['permission'])
                 {
-//                    $objReturn = $objController->$strFunctionName();
                     if(!isset($arrRouteData['params']))
                         $arrRouteData['params'] = array();
 
@@ -343,7 +243,6 @@ class ControllerLoader
      */
     public static function setCurrentLangController($strName)
     {
-//    var_dump(self::$controllers);
         foreach(self::$controllers as $keyC => $valC)
         {
             foreach($valC['lang'] as $keyL => $valL)
@@ -356,31 +255,7 @@ class ControllerLoader
             }
         }
     }
-
-    public static function setRoutes()
-    {
-        //@TODO - ovo videti gde se sve koristi, ovaj metod bi verovatno trebalo obrisati, rute se vise ne pakuju u kontroler imaju zasebni logiku
-//        foreach(self::$controllers as $key => $val)
-//        {
-//            $arrRoutes = Router::getRoutesFromController($key);
-//
-//            if(isset($arrRoutes))
-//            {
-//                foreach($arrRoutes as $strRoute => $arrRouteData)
-//                {
-//                    foreach($arrRouteData as $strMethod => $arrDetails)
-//                    {
-//                        self::$controllers[$key]['routes'][$strRoute][$strMethod] = array(
-//                                                            'function' => $arrDetails['function']
-//                                                            );
-//                    }
-//                }
-//            }
-//        }
-
-//        var_dump(self::$controllers);
-    }
-
+    
     /**
      *
      * @return array
