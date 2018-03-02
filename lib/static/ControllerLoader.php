@@ -11,7 +11,10 @@ namespace cms\lib\help;
 
 use cms\CMS;
 use fm\lib\help\ClassLoader, fm\FM;
+use fm\lib\help\Numeric;
 use fm\lib\help\Request;
+use fm\lib\help\Router;
+use fm\lib\help\Stringer;
 
 class ControllerLoader
 {
@@ -26,6 +29,13 @@ class ControllerLoader
      *                                                      'table' => array(
      *                                                                          'Naziv tabele'
      *                                                                       ),
+     *                                                      'routes' => array(
+     *                                                                          'route_path'    => array(
+     *                                                                                                     'method' => 'request method',
+     *                                                                                                     'function' => 'controller's method name'
+     *                                                                                                   ),
+     *                                                                        ),
+     * ),
      *                                                  ),
      *                  );
      */
@@ -127,9 +137,10 @@ class ControllerLoader
      * Load kontrolera, prosledjuje se kljuc kontrolera, ako postoji path proverava i ako postoje setovane tabele za kontroler radi mini rewrite
      * I bilduje linkove za zamenu jezika
      * @param string $strKey
+     * @param boolean $boolRouter
      * @return object mixed
      */
-    public static function load($strKey)
+    public static function load($strKey, $boolRouter = false)
     {
         $objController = ClassLoader::load('app\lib\mvc\controller\Controller' . ucfirst($strKey));
         $objModel = ClassLoader::load('app\lib\mvc\model\Model' . ucfirst($strKey));
@@ -137,61 +148,93 @@ class ControllerLoader
 
         $objController->setModel($objModel)->setResponse($objResponse);
 
-        foreach(Lang::getLang() as $keyLang => $lang)
+        if($boolRouter)
         {
-            if($keyLang != Lang::getCurrent())
-                self::$chLang[$keyLang]['path'] = "/" . self::getNameKeyLang(self::getCurrent(), $keyLang);
-
-            self::$chLang[$keyLang]['name'] = Lang::getLang($keyLang)['name'];
-        }
-
-        $strPath = Request::get('path');
-        if(isset($strPath))
-        {
-            if(isset(self::$controllers[$strKey]['table']))
+            foreach(Lang::getLang() as $keyLang => $lang)
             {
-                foreach(self::$controllers[$strKey]['table'] as $val)
+                if($keyLang != Lang::getCurrent())
+                    self::$chLang[$keyLang]['path'] = "/" . self::getNameKeyLang(self::getCurrent(), $keyLang);
+
+                self::$chLang[$keyLang]['name'] = Lang::getLang($keyLang)['name'];
+            }
+
+
+            $strRoute = "/";
+
+            $strPath = Request::get('path');
+
+            if(isset($strPath))
+            {
+                $strRoute = "/$strPath";
+
+                if(isset(self::$controllers[$strKey]['table']))
                 {
-                    $strSql = "SELECT sid, path FROM " . $val ."_mlc WHERE path = :path AND lang = '" . Lang::getCurrent() . "' LIMIT 1";
-                    $arrPrepare[":path"] = $strPath;
-
-                    CMS::$db->query($strSql, $arrPrepare);
-                    $arrDataTemp = CMS::$db->fetch(FM_FETCH_ASSOC, false);
-
-                    if(CMS::$db->rowCount() > 0)
+                    foreach(self::$controllers[$strKey]['table'] as $val)
                     {
-                        $objController->setPath($val, $arrDataTemp['sid']);
+                        $strSql = "SELECT sid, path FROM " . $val ."_mlc WHERE path = :path AND lang = '" . Lang::getCurrent() . "' LIMIT 1";
+                        $arrPrepare[":path"] = $strPath;
 
-                        if(isset(self::$chLang))
+                        CMS::$db->query($strSql, $arrPrepare);
+                        $arrDataTemp = CMS::$db->fetch(FM_FETCH_ASSOC, false);
+
+                        if(CMS::$db->rowCount() > 0)
                         {
-                            $strSql = "SELECT lang, path FROM " . $val ."_mlc WHERE sid = '" . $arrDataTemp['sid'] . "' AND lang != '" . Lang::getCurrent() . "'";
-                            CMS::$db->query($strSql);
-                            $arrDataOtherLang = CMS::$db->fetch(FM_FETCH_KEY_PAIR);
-                            if(CMS::$db->rowCount() > 0)
+                            $objController->setPath($val, $arrDataTemp['sid']);
+
+                            if(isset(self::$chLang))
                             {
-                                foreach(self::$chLang as $keyData => &$valData)
+                                $strSql = "SELECT lang, path FROM " . $val ."_mlc WHERE sid = '" . $arrDataTemp['sid'] . "' AND lang != '" . Lang::getCurrent() . "'";
+                                CMS::$db->query($strSql);
+                                $arrDataOtherLang = CMS::$db->fetch(FM_FETCH_KEY_PAIR);
+                                if(CMS::$db->rowCount() > 0)
                                 {
-                                    if(isset($valData['path']) && isset($arrDataOtherLang[$keyData]))
-                                        $valData['path'] .= "/" . $arrDataOtherLang[$keyData];
+                                    foreach(self::$chLang as $keyData => &$valData)
+                                    {
+                                        if(isset($valData['path']) && isset($arrDataOtherLang[$keyData]))
+                                            $valData['path'] .= "/" . $arrDataOtherLang[$keyData];
+                                    }
                                 }
                             }
+                            break;
                         }
-                        break;
                     }
                 }
             }
-        }
 
-        if(isset(self::$chLang))
-        {
-            foreach(self::$chLang as &$val)
+            if(isset(self::$chLang))
             {
-                if(isset($val['path']) && $val['path'] != "/")
-                    $val['path'] .= "." . CMS::$view->getType();
+                foreach(self::$chLang as &$val)
+                {
+                    if(isset($val['path']) && $val['path'] != "/")
+                        $val['path'] .= "." . CMS::$view->getType();
+                }
             }
-        }
 
-        return $objController;
+            FM::includer(APP_ROUTES . $strKey . ".php");
+
+            $arrRouteData = Router::getRouteDetails($strKey, $strRoute);
+
+            if(isset($arrRouteData))
+            {
+                $strFunctionName = $arrRouteData['function'];
+
+                if(CMS::$userPermission & $arrRouteData['permission'])
+                {
+                    if(!isset($arrRouteData['params']))
+                        $arrRouteData['params'] = array();
+
+                    $objReturn = call_user_func_array(array($objController, $strFunctionName), $arrRouteData['params']);
+                }
+                else
+                    $objReturn = $objResponse->setResponseCode(401)->setTemplatePath(CMS_C_STRUCTURE . '/401.tpl');
+            }
+            else
+                $objReturn = $objResponse->setResponseCode(404)->setTemplatePath(CMS_C_STRUCTURE . '/404.tpl');
+        }
+        else
+            $objReturn = $objController;
+
+        return $objReturn;
     }
 
     /**
@@ -200,7 +243,6 @@ class ControllerLoader
      */
     public static function setCurrentLangController($strName)
     {
-//    var_dump(self::$controllers);
         foreach(self::$controllers as $keyC => $valC)
         {
             foreach($valC['lang'] as $keyL => $valL)
@@ -213,7 +255,7 @@ class ControllerLoader
             }
         }
     }
-
+    
     /**
      *
      * @return array

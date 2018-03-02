@@ -18,10 +18,66 @@ class ControllerNews extends Controller
      */
     public static $page;
 
-    public function run()
+    public function index($intPage = null, $intPerPage = null)
     {
-        self::$page = Request::name('page');
-        $strPath = Request::get('path');
+        self::$page = $intPage;
+
+        if(isset($intPerPage))
+            self::$newsPage = $intPerPage;
+
+        $arrNews = $this->getModel()->listItems();
+
+        return $this->getResponse()->setData($arrNews)->setResponseCode(200)->setTemplatePath(CMS_C_NEWS . '/list_news.tpl');
+    }
+
+    public function create()
+    {
+        return $this->getResponse()->setData("test")->setResponseCode(201)->setTemplatePath(CMS_C_NEWS . '/one_news.tpl');
+    }
+
+    public function categoryList()
+    {
+        $arrData = $this->getModel()->categoryList();
+
+        return $this->getResponse()->setData($arrData)->setResponseCode(200)->setTemplatePath(CMS_C_NEWS . '/box_category_news.tpl');
+    }
+
+    public function categoryShow()
+    {
+        return $this->getResponse()->setData("categories Show")->setResponseCode(200)->setTemplatePath(CMS_C_NEWS . '/box_category_news.tpl');
+    }
+
+    public function categoryCreate()
+    {
+        return $this->getResponse()->setData("category Create")->setResponseCode(200)->setTemplatePath(CMS_C_NEWS . '/box_category_news.tpl');
+    }
+
+    public function categoryUpdate($intId)
+    {
+        return $this->getResponse()->setData("Category $intId Update")->setResponseCode(200)->setTemplatePath(CMS_C_NEWS . '/box_category_news.tpl');
+    }
+
+    public function categoryDelete($intId)
+    {
+        return $this->getResponse()->setData("Category $intId delete")->setResponseCode(200)->setTemplatePath(CMS_C_NEWS . '/box_category_news.tpl');
+    }
+
+    public function newsUpdate($intId)
+    {
+        return $this->getResponse()->setData("News $intId Update")->setResponseCode(200)->setTemplatePath(CMS_C_NEWS . '/box_category_news.tpl');
+    }
+
+    public function newsDelete($intId)
+    {
+        return $this->getResponse()->setData("News $intId delete")->setResponseCode(200)->setTemplatePath(CMS_C_NEWS . '/box_category_news.tpl');
+    }
+
+    public function run($strPath, $intPage = null, $intPerPage = null)
+    {
+        self::$page = $intPage;
+
+        if(isset($intPerPage))
+            self::$newsPage = $intPerPage;
 
         $objResponse = $this->getResponse()->setResponseCode(404)->setTemplatePath(CMS_C_STRUCTURE . '/404.tpl');
 

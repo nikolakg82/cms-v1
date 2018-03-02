@@ -34,9 +34,4 @@ interface Controller
      * @return Model
      */
     public function getModel();
-
-    /**
-     * @return Response
-     */
-    public function run();
 }

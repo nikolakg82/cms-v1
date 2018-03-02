@@ -34,18 +34,20 @@ abstract class CmsStart
 
         $strView = Request::name('view', FM_STRING, FM_GET);
 
-        if(empty($strView))
-            $strView = FM_HTML;
+        if(!empty($strView))
+            CMS::$viewFormat = $strView;
+//var_dump($_SERVER['REQUEST_METHOD']);
+//var_dump(ControllerLoader::getCurrent());
 
-        $this->activeController = ControllerLoader::load(ControllerLoader::getCurrent());
-        $this->response = $this->activeController->run();
+        $this->response = ControllerLoader::load(ControllerLoader::getCurrent(), true);
+//        $this->response = $this->activeController->run();
 
         $arrResponseCode = FM::includer(FM_CONFIG . 'responseCode.php', false);
 
         if(isset($arrResponseCode[$this->response->getResponseCode()]))
             FM::header($arrResponseCode[$this->response->getResponseCode()], true, $this->response->getResponseCode());
 
-        if($strView == FM_JSON)
+        if(CMS::$viewFormat == FM_JSON)
         {
             FM::header('Content-Type: application/json', true, $this->response->getResponseCode());
             echo json_encode($this->response->getData());

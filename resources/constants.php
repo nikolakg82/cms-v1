@@ -50,6 +50,13 @@
     define('CMS_FRENCH',            'Français');
 
 /**
+ * User permission
+ */
+    define('CMS_GUEST',             1);
+    define('CMS_USER',              2);
+    define('CMS_ADMIN',             4);
+
+/**
  * Parametri polja u adminu
  */
     define('CMS_T_TITLE',           'title');
