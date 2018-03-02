@@ -10,6 +10,7 @@
     define('CMS_ABSTRACT',          CMS_LIB         . 'abstract/');
     define('CMS_PUBLIC',            CMS_LIB         . 'public/');
     define('CMS_STATIC',            CMS_LIB         . 'static/');
+    define('CMS_INTERFACE',         CMS_LIB         . 'interface/');
     define('CMS_MVC',               CMS_LIB         . 'mvc/');
     define('CMS_CONTROLLER',        CMS_MVC         . 'controller/');
     define('CMS_MODEL',             CMS_MVC         . 'model/');
@@ -47,6 +48,13 @@
     define('CMS_SERBIAN',           'Srpski');
     define('CMS_ENGLISH',           'English');
     define('CMS_FRENCH',            'Français');
+
+/**
+ * User permission
+ */
+    define('CMS_GUEST',             1);
+    define('CMS_USER',              2);
+    define('CMS_ADMIN',             4);
 
 /**
  * Parametri polja u adminu
