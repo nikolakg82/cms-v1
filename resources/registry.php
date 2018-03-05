@@ -20,7 +20,7 @@ ClassLoader::addClass('RegistryAdmin',    CMS_STATIC . 'RegistryAdmin.php');
  */
 ClassLoader::addClass('cms\lib\abstracts\CmsStart',           CMS_ABSTRACT . 'CmsStart.php',       'abstract');
 ClassLoader::addClass('cms\lib\abstracts\Controller',        CMS_ABSTRACT . 'controller.php',    'abstract', null, ['Controller']);
-ClassLoader::addClass('cms\lib\abstracts\Model',             CMS_ABSTRACT . 'Model.php',         'abstract', null, ['Model']);
+ClassLoader::addClass('cms\lib\abstracts\Model',             CMS_ABSTRACT . 'Model.php',         'abstract', 'fm\lib\publisher\QueryBuilder', ['Model']);
 
 /**
  * Public klase

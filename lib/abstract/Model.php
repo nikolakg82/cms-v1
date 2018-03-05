@@ -3,8 +3,9 @@
 namespace cms\lib\abstracts;
 
 use fm\lib\help\Numeric;
+use fm\lib\publisher\QueryBuilder;
 
-abstract class Model implements \cms\lib\interfaces\Model
+abstract class Model extends QueryBuilder implements \cms\lib\interfaces\Model
 {
     /**
      * @param $intPage
