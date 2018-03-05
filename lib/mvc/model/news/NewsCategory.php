@@ -1,16 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: IMS-WS01
- * Date: 3/3/2018
- * Time: 8:52 PM
- */
 
-namespace lib\mvc\model\news;
+namespace cms\lib\mvc\model\news;
 
 use cms\lib\abstracts\Model;
 
-class NewsCategory extends Model
+abstract class NewsCategory extends Model
 {
     protected $table = "app_news_category";
 

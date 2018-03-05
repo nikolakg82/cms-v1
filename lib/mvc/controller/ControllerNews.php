@@ -37,6 +37,11 @@ class ControllerNews extends Controller
 
     public function categoryList()
     {
+        $NewsCategory = CMS::getModel('NewsCategory', 'news');
+
+        var_dump($NewsCategory);
+
+        die();
         $arrData = $this->getModel()->categoryList();
 
         return $this->getResponse()->setData($arrData)->setResponseCode(200)->setTemplatePath(CMS_C_NEWS . '/box_category_news.tpl');

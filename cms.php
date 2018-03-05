@@ -5,6 +5,7 @@ namespace cms;
 use cms\lib\help\Lang;
 use cms\lib\publisher\View;
 use fm\FM, fm\lib\help\ClassLoader;
+use fm\lib\help\File;
 use fm\lib\help\Request;
 use fm\lib\publisher\DatabaseEngine;
 
@@ -109,5 +110,47 @@ class CMS
     public static function getAdminTheme()
     {
         return self::$adminTheme;
+    }
+
+    public static function getModel($strModelName, $strKey = null)
+    {
+        $strModelClassName = 'app\lib\mvc\model\\';
+        if(!empty($strKey))
+            $strModelClassName .= $strKey . '\\';
+
+        $strModelClassName .= $strModelName;
+
+        $strClassPath = APP_ROOT . 'lib/mvc/model/';
+        if(!empty($strKey))
+            $strClassPath .= "$strKey/";
+
+        $strClassPath .= $strModelName . ".php";
+
+        if(File::exists($strClassPath))
+        {
+            $strParentClass = null;
+            $strParentClassPath = CMS_ROOT . 'lib/mvc/model/';
+            if(!empty($strKey))
+                $strParentClassPath .= "$strKey/";
+
+            $strParentClassPath .= $strModelName . ".php";
+
+            if(File::exists($strParentClassPath))
+            {
+                $strParentClass = 'cms\lib\mvc\model\\';
+                if(!empty($strKey))
+                    $strParentClass .= $strKey . '\\';
+
+                $strParentClass .= $strModelName;
+
+                ClassLoader::addClass($strParentClass, $strParentClassPath, 'abstract', 'cms\lib\abstracts\Model');
+            }
+
+            ClassLoader::addClass($strModelClassName, $strClassPath, 'public', $strParentClass);
+        }
+
+        $objModel = ClassLoader::load($strModelClassName);
+
+        return $objModel;
     }
 }
