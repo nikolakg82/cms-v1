@@ -7,6 +7,7 @@ use cms\lib\publisher\View;
 use fm\FM, fm\lib\help\ClassLoader;
 use fm\lib\help\File;
 use fm\lib\help\Request;
+use fm\lib\help\Stringer;
 use fm\lib\publisher\DatabaseEngine;
 
 define('CMS_ROOT', realpath(dirname(__FILE__)) . '/');
@@ -112,22 +113,32 @@ class CMS
         return self::$adminTheme;
     }
 
-    public static function getModel($strModelName, $strKey = null)
+    public static function getModel($strModelClassName, $strKey = null)
     {
-        $strModelClassName = 'app\lib\mvc\model\\';
-        if(!empty($strKey))
-            $strModelClassName .= $strKey . '\\';
+        $arrExplode = Stringer::explode($strModelClassName, '\\');
 
-        $strModelClassName .= $strModelName;
+        $strBasePath = APP_ROOT;
+        if(isset($arrExplode[0]) && $arrExplode[0] == 'cms')
+        {
+            $strBasePath = CMS_ROOT;
+            $strModelClassName = Stringer::strReplace($strModelClassName, 'cms\\', '');
+        }
+        else
+        {
+            $strModelParentClassName = CMS_ROOT .
+            $strModelClassName = Stringer::strReplace($strModelClassName, 'app\\', '');
+        }
 
-        $strClassPath = APP_ROOT . 'lib/mvc/model/';
-        if(!empty($strKey))
-            $strClassPath .= "$strKey/";
+        $strClassPath = $strBasePath . Stringer::strReplace($strModelClassName, '\\', '/') . '.php';
 
-        $strClassPath .= $strModelName . ".php";
+        var_dump($strClassPath);
+        die();
 
         if(File::exists($strClassPath))
         {
+
+
+
             $strParentClass = null;
             $strParentClassPath = CMS_ROOT . 'lib/mvc/model/';
             if(!empty($strKey))

@@ -2,6 +2,7 @@
 
 namespace cms\lib\mvc\controller;
 
+use app\lib\mvc\model\news\NewsCategory;
 use cms\CMS;
 use cms\lib\abstracts\Controller;
 use fm\lib\help\Request;
@@ -37,7 +38,7 @@ class ControllerNews extends Controller
 
     public function categoryList()
     {
-        $NewsCategory = CMS::getModel('NewsCategory', 'news');
+        $NewsCategory = CMS::getModel(NewsCategory::class, 'news');
 
         var_dump($NewsCategory);
 
