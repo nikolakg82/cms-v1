@@ -32,6 +32,7 @@
     define('CMS_C_INDEX',           'index');
     define('CMS_C_PAGE',            'page');
     define('CMS_C_NEWS',            'news');
+    define('CMS_C_USER',            'user');
     define('CMS_C_GALLERY',         'gallery');
     define('CMS_C_CONTACT',         'contact');
 

@@ -6,6 +6,7 @@ use cms\CMS;
 use cms\lib\help\ControllerLoader;
 use cms\lib\help\Lang;
 use fm\FM;
+use fm\lib\help\Numeric;
 use fm\lib\help\Request;
 use fm\lib\publisher\Response;
 
@@ -24,8 +25,12 @@ abstract class CmsStart
     public function __construct()
     {
         ControllerLoader::setCurrentLangController(Request::name('controller', FM_STRING, FM_GET));
+        $this->authorize();
     }
 
+    /**
+     * Run app
+     */
     public function run()
     {
         CMS::setView();
@@ -36,11 +41,8 @@ abstract class CmsStart
 
         if(!empty($strView))
             CMS::$viewFormat = $strView;
-//var_dump($_SERVER['REQUEST_METHOD']);
-//var_dump(ControllerLoader::getCurrent());
 
         $this->response = ControllerLoader::load(ControllerLoader::getCurrent(), true);
-//        $this->response = $this->activeController->run();
 
         $arrResponseCode = FM::includer(FM_CONFIG . 'responseCode.php', false);
 
@@ -68,6 +70,39 @@ abstract class CmsStart
             CMS::$view->assign('langs', Lang::getLang());
 
             CMS::$view->show();
+        }
+    }
+
+    /**
+     * Set user permission by token and user id
+     */
+    public function authorize()
+    {
+        $strToken = FM::getCustomHttpHeader('token');
+
+        if(isset($strToken))
+        {
+            $intUserId = FM::getCustomHttpHeader('user');
+
+            if(isset($intUserId))
+            {
+                $intUserId = Numeric::intVal($intUserId);
+
+                $strSql = "SELECT id, permission FROM " . CMS::$dbPrefix . "users
+                            WHERE token = :token AND id = :id AND token_expire_time > UNIX_TIMESTAMP() LIMIT 1";
+
+                $arrParams[':token'] = $strToken;
+                $arrParams[':id'] = $intUserId;
+
+                CMS::$db->query($strSql, $arrParams);
+                if(CMS::$db->rowCount() > 0)
+                {
+                    $arrData = CMS::$db->fetch(FM_FETCH_ASSOC, false);
+
+                    if(isset($arrData['permission']))
+                        CMS::$userPermission = $arrData['permission'];
+                }
+            }
         }
     }
 }

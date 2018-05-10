@@ -35,6 +35,8 @@ ClassLoader::addClass('cms\lib\mvc\controller\ControllerIndex',  CMS_CONTROLLER 
 
 ClassLoader::addClass('cms\lib\mvc\model\ModelNews',             CMS_MODEL . 'ModelNews.php',             'public',        'cms\lib\abstracts\Model');
 ClassLoader::addClass('cms\lib\mvc\controller\ControllerNews',  CMS_CONTROLLER . 'ControllerNews.php','public',        'cms\lib\abstracts\Controller');
+ClassLoader::addClass('cms\lib\mvc\model\ModelUser',             CMS_MODEL . 'ModelUser.php',             'public',        'cms\lib\abstracts\Model');
+ClassLoader::addClass('cms\lib\mvc\controller\ControllerUser',  CMS_CONTROLLER . 'ControllerUser.php','public',        'cms\lib\abstracts\Controller');
 
 //ClassLoader::addClass('Cmadmin',            CMS_MODEL . 'cmadmin.php',            'public',        'Cmodel');
 //ClassLoader::addClass('Ccadmin',            CMS_CONTROLLER . 'ccadmin.php',       'public',        'Controller');
