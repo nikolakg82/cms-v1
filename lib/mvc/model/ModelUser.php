@@ -26,15 +26,17 @@ class ModelUser extends Model
 
             if(isset($arrData['id']))
             {
-                $mixLoginTokens['token'] = md5($arrData['id'] . time());
+                $mixLoginTokens['token'] = $this->generateUserToken($arrData['id']);
                 $mixLoginTokens['user'] = $arrData['id'];
 
                 $strSqlUpdate = "UPDATE " . CMS::$dbPrefix . "users SET
                                     token = :token,
                                     token_expire_time = UNIX_TIMESTAMP() + 60 * 60 * 24
+                                    WHERE id = :id
                                     ";
 
                 $arrUpdateParams[':token'] = $mixLoginTokens['token'];
+                $arrUpdateParams[':id'] = $mixLoginTokens['user'];
                 CMS::$db->query($strSqlUpdate, $arrUpdateParams);
 
                 if(CMS::$db->rowCount() == 0)
@@ -43,5 +45,30 @@ class ModelUser extends Model
         }
 
         return $mixLoginTokens;
+    }
+
+    public function logout($strToken, $intUserId)
+    {
+        $boolReturn = true;
+
+        $strSqlUpdate = "UPDATE " . CMS::$dbPrefix . "users SET
+                                    token = '',
+                                    token_expire_time = 0
+                                    WHERE token = :token AND id = :id
+                                    ";
+
+        $arrUpdateParams[':token'] = $strToken;
+        $arrUpdateParams[':id'] = $intUserId;
+        CMS::$db->query($strSqlUpdate, $arrUpdateParams);
+
+        if(CMS::$db->rowCount() == 0)
+            $boolReturn = false;
+
+        return $boolReturn;
+    }
+
+    public function generateUserToken($intUserId)
+    {
+        return md5($intUserId . time());
     }
 }
