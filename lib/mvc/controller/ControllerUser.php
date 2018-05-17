@@ -61,4 +61,9 @@ class ControllerUser extends Controller
 
         return $objResponse;
     }
+
+    public function getAdminUser()
+    {
+        return $this->getResponse()->setData(['status' => true])->setResponseCode(200);
+    }
 }
