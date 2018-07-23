@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * @copyright Copyright (c) 2005-2018 MSD - All Rights Reserved
+ * @link http://www.nikolamilenkovic.com
+ * @email info@nikolamilenkovic.com
+ * @author Nikola Milenkovic info@nikolamilenkovic.com dzoni82.kg@gmail.com http://www.nikolamilenkovic.com
+ * Date: 2/16/2018
+ * Time: 1:58 PM
+ */
+
 namespace cms\lib\publisher;
 
 use fm\FM;
@@ -8,41 +17,39 @@ use fm\lib\help\ClassLoader;
 class View
 {
     /**
-     * @var - smarty objekat
+     * @var - Smarty object
      */
     protected $smarty;
 
     /**
-     * @var - putanja do templejta
+     * @var - Path to templates
      */
     protected $theme;
 
     /**
-     * @var - putanja do smarty kesa
+     * @var - Path to smarty cache
      */
     protected $cache;
 
     /**
-     * @var - putanja do smarty compile cache foldera
+     * @var - Path smarty compile cache
      */
     protected $themeCache;
 
     /**
-     * @var - Tip prikaza, (HTML, XML, JSON)
+     * @var - Show type, (HTML, XML, JSON)
      */
     protected $type = FM_HTML;
 
     /**
-     * @var - Potrebni podaci za assing u smarty
+     * @var - Data for assign in smarty
      */
     protected $data;
 
     /**
-     * @var - putanja do templejta koji se prikazuje
+     * @var - Path to templates
      */
     protected $displayTemplate;
-
-    //Seteri
 
     public function setTheme($strPath)
     {
@@ -60,9 +67,9 @@ class View
     }
 
     /**
-     * Setuje tip prikaza strane
+     * Set show type
      *
-     * @param string $strType - Tip prikaza strane
+     * @param string $strType - Show type
      */
     public function setType($strType)
     {
@@ -80,8 +87,6 @@ class View
             }
         }
     }
-
-    //Geteri
 
     public function getTheme()
     {
