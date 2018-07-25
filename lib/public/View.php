@@ -114,7 +114,7 @@ class View
     }
 
     /**
-     * Istanciranje smartija i podesavanje radnih foldra za smarty
+     * Instance and setup smarty template engine
      *
      * @throws \Exception
      */
@@ -128,11 +128,11 @@ class View
     }
 
     /**
-     * Asajnuje varijable u smarty
+     * Assign variable in smarty
      *
-     * @param string $strVarName - naziv valijable
-     * @param mixed $mixData - vrednost varijable
-     * @param boolean $boolOverwrite - ako je true gazi se prethodna vresnost
+     * @param string $strVarName - Name of variable
+     * @param mixed $mixData - Value of variable
+     * @param boolean $boolOverwrite - is overwrite previous value
      */
     public function assign($strVarName, $mixData, $boolOverwrite = false)
     {
@@ -145,18 +145,18 @@ class View
             $this->data[$strVarName] = $mixData;
         else
         {
-            //@TODO ovo treba da se stavi u logger greska
+            //@TODO add error to logger
         }
     }
 
-    //@TODO za ovo napisati pravu logiku da bi imalo namenu
+    //@TODO Check point for this method
     public function append($strVarName, $mixData)
     {
         $this->smarty->append($strVarName, $mixData);
     }
 
     /**
-     * Dodavanje templejta koji ce se prikazati, moze da ima samo jedan
+     * Add template for show, can be only one
      *
      * @param $strPath
      */
@@ -164,15 +164,14 @@ class View
     {
         if(isset($this->displayTemplate))
         {
-            //@TODO Izbaciti notice u loger
+            //@TODO add error in logger
         }
 
         $this->displayTemplate = $strPath;
     }
 
     /**
-     * Asajnovanje podataku u smarty i prikaz templejta
-     * Nakon toga radi se unsetovanje podatak i templejta da bi mogao ponovo da se radi prikaz
+     * Show template with assigned data, after that unset all data
      */
     public function show()
     {
@@ -180,7 +179,7 @@ class View
         {
             foreach($this->data as $key => $val)
             {
-                $this->smarty->assign($key, $val);//@TODO ubaciti u loger ove podatke
+                $this->smarty->assign($key, $val);//@TODO add in logger this data
             }
 
             unset($this->data);
@@ -188,17 +187,17 @@ class View
 
         if(!empty($this->displayTemplate))
         {
-            $this->smarty->display($this->displayTemplate);//@TODO ubaciti u loger
+            $this->smarty->display($this->displayTemplate);//@TODO add in logger this data
             unset($this->displayTemplate);
         }
     }
 
     /**
-     * Asajnovanje i prikaz templetjta, ovo je najpogodnije kada se iz smarty templejta poziva neki prikaz
+     * Assign variable to smarty and show templates, useful to call from another template
      *
-     * @param $strTheme - putanja do templejta
-     * @param $arrData - Podaci za prikaz
-     * @param string $strKey - Kljuc pod kojim ce se asajnovati podaci, po defaultu je data
+     * @param $strTheme - Path to template
+     * @param $arrData - Data for show
+     * @param string $strKey - Key for assigned data
      */
     public function showData($strTheme, $arrData, $strKey = "data")
     {

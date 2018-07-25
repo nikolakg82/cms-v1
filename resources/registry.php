@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * @copyright Copyright (c) 2005-2018 MSD - All Rights Reserved
+ * @link http://www.nikolamilenkovic.com
+ * @email info@nikolamilenkovic.com
+ * @author Nikola Milenkovic info@nikolamilenkovic.com dzoni82.kg@gmail.com http://www.nikolamilenkovic.com
+ * Date: 5/3/2016
+ * Time: 2:16 PM
+ */
+
 use fm\lib\help\ClassLoader, fm\lib\help\InterfaceLoader;
 
 /**
@@ -9,21 +18,21 @@ InterfaceLoader::addItem('Controller',     CMS_INTERFACE . 'Controller.php');
 InterfaceLoader::addItem('Model',          CMS_INTERFACE . 'Model.php');
 
 /**
- * Staticne klase
+ * Static class
  */
 ClassLoader::addClass('ControllerLoader',CMS_STATIC . 'ControllerLoader.php');
 ClassLoader::addClass('Lang',              CMS_STATIC . 'Lang.php');
 ClassLoader::addClass('RegistryAdmin',    CMS_STATIC . 'RegistryAdmin.php');
 
 /**
- * Abstraktne klase
+ * Abstract class
  */
 ClassLoader::addClass('cms\lib\abstracts\CmsStart',           CMS_ABSTRACT . 'CmsStart.php',       'abstract');
 ClassLoader::addClass('cms\lib\abstracts\Controller',        CMS_ABSTRACT . 'Controller.php',    'abstract', null, ['Controller']);
 ClassLoader::addClass('cms\lib\abstracts\Model',             CMS_ABSTRACT . 'Model.php',         'abstract', null, ['Model']);
 
 /**
- * Public klase
+ * Public class
  */
 ClassLoader::addClass('Smarty',             CMS_SMARTY . 'Smarty.class.php',      'public');
 ClassLoader::addClass('SmartyBC',           CMS_SMARTY . 'SmartyBC.class.php',    'public');
@@ -45,5 +54,5 @@ ClassLoader::addClass('cms\lib\mvc\model\ModelAdmin',             CMS_MODEL . 'M
 //ClassLoader::addClass('Ccadmin',            CMS_CONTROLLER . 'ccadmin.php',       'public',        'Controller');
 //ClassLoader::addClass('Cvadmin',            CMS_VIEW . 'cvadmin.php',             'public',        'Ccview');
 
-//Load staticnih klasa
+//Load static class
 ClassLoader::loadStaticClass();

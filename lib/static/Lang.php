@@ -1,8 +1,10 @@
 <?php
 
 /**
- * Created by PhpStorm.
- * User: Nikola
+ * @copyright Copyright (c) 2005-2018 MSD - All Rights Reserved
+ * @link http://www.nikolamilenkovic.com
+ * @email info@nikolamilenkovic.com
+ * @author Nikola Milenkovic info@nikolamilenkovic.com dzoni82.kg@gmail.com http://www.nikolamilenkovic.com
  * Date: 5/3/2016
  * Time: 2:16 PM
  */
@@ -14,32 +16,30 @@ use fm\FM;
 class Lang
 {
     /**
-     * @var string - Default jezik
+     * @var string - Default lang
      */
     protected static $default = 'SR';
 
     /**
-     * @var string - Trenutni jezik na sajtu
+     * @var string - Current lang
      */
     protected static $current;
 
     /**
-     * @var array - Labele
+     * @var array - Labels
      */
     protected static $lab = array();
 
     /**
-     * Niz sa aktivnim jezicima
+     * @var array - All lang
      *
-     * @var array('Kljuc jezika' => array(
-     *                                  'name' => 'Naziv jezika'
-     *                                  ''
+     * Example: array('lang_key' => array(
+     *                                  'name' => 'Lang name'
      *                                  )
      *          )
      */
     protected static $lang = array();
 
-    //Seteri
     public static function setDefault($strLangKey)
     {
         if(isset(self::$lang[$strLangKey]))
@@ -61,8 +61,6 @@ class Lang
         self::$lab = $arrLab;
     }
 
-
-    //Geteri
     public static function getDefault()
     {
         return self::$default;
@@ -89,9 +87,10 @@ class Lang
 
 
     /**
-     * Dodavanje jezika
-     * @param string $strLangKey - Kljuc jezika
-     * @param string $strLangName - Naziv jezika
+     * Add lang to registry
+     *
+     * @param string $strLangKey - lang key
+     * @param string $strLangName - Lang name
      */
     public static function addLang($strLangKey, $strLangName)
     {
