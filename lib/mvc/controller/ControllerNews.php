@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * @copyright Copyright (c) 2005-2018 MSD - All Rights Reserved
+ * @link http://www.nikolamilenkovic.com
+ * @email info@nikolamilenkovic.com
+ * @author Nikola Milenkovic info@nikolamilenkovic.com dzoni82.kg@gmail.com http://www.nikolamilenkovic.com
+ * Date: 5/3/2016
+ * Time: 2:16 PM
+ */
+
 namespace cms\lib\mvc\controller;
 
 use cms\CMS;
@@ -9,12 +18,12 @@ use fm\lib\help\Request;
 class ControllerNews extends Controller
 {
     /**
-     * @var int - Broj vesti po strani
+     * @var int - Number of news per page
      */
     public static $newsPage = 10;
 
     /**
-     * @var int - Trenutna strana
+     * @var int - Current page
      */
     public static $page;
 

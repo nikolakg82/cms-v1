@@ -1,10 +1,20 @@
 <?php
+
 /**
- * Ovde se definisu konstante vezane za CMS
+ * @copyright Copyright (c) 2005-2018 MSD - All Rights Reserved
+ * @link http://www.nikolamilenkovic.com
+ * @email info@nikolamilenkovic.com
+ * @author Nikola Milenkovic info@nikolamilenkovic.com dzoni82.kg@gmail.com http://www.nikolamilenkovic.com
+ * Date: 5/3/2016
+ * Time: 2:16 PM
  */
 
 /**
- * Putanje do foldera
+ * Define CMS constants
+ */
+
+/**
+ * Path to folders
  */
     define('CMS_LIB',               CMS_ROOT        . 'lib/');
     define('CMS_ABSTRACT',          CMS_LIB         . 'abstract/');
@@ -25,25 +35,26 @@
     define('CMS_THEME',             CMS_ROOT        . 'theme/');
 
 /**
- * Kljucevi osnovnih kontrolera
+ * Main controllers key
  */
     define('CMS_C_STRUCTURE',       'structure');//Ovo nije realan controler, ne koristi se nigde, potreban je samo zbog putanja za templete
     define('CMS_C_ADMIN',           'admin');
     define('CMS_C_INDEX',           'index');
     define('CMS_C_PAGE',            'page');
     define('CMS_C_NEWS',            'news');
+    define('CMS_C_USER',            'user');
     define('CMS_C_GALLERY',         'gallery');
     define('CMS_C_CONTACT',         'contact');
 
 /**
- * Jezici
+ * Lang
  */
     define('CMS_SR',                'SR');
     define('CMS_EN',                'EN');
     define('CMS_FR',                'FR');
 
 /**
- * Nazivi jezika
+ * Lang names
  */
     define('CMS_SERBIAN',           'Srpski');
     define('CMS_ENGLISH',           'English');
@@ -57,7 +68,7 @@
     define('CMS_ADMIN',             4);
 
 /**
- * Parametri polja u adminu
+ * Fields
  */
     define('CMS_T_TITLE',           'title');
     define('CMS_T_TYPE',            'type');

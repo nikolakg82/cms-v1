@@ -1,8 +1,10 @@
 <?php
 
 /**
- * Created by PhpStorm.
- * User: Nikola
+ * @copyright Copyright (c) 2005-2018 MSD - All Rights Reserved
+ * @link http://www.nikolamilenkovic.com
+ * @email info@nikolamilenkovic.com
+ * @author Nikola Milenkovic info@nikolamilenkovic.com dzoni82.kg@gmail.com http://www.nikolamilenkovic.com
  * Date: 2/16/2018
  * Time: 2:51 PM
  */

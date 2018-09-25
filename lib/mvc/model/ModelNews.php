@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * @copyright Copyright (c) 2005-2018 MSD - All Rights Reserved
+ * @link http://www.nikolamilenkovic.com
+ * @email info@nikolamilenkovic.com
+ * @author Nikola Milenkovic info@nikolamilenkovic.com dzoni82.kg@gmail.com http://www.nikolamilenkovic.com
+ * Date: 5/3/2016
+ * Time: 2:16 PM
+ */
+
 namespace cms\lib\mvc\model;
 
 use cms\CMS;
@@ -12,11 +21,10 @@ use fm\FM;
 class ModelNews extends Model
 {
     /**
-     * Vraca niz sa vestima, ako je prosledjena kategorija, vraca podatke o samoj kategoriji i listu vesti za tu kategoriju, ako je prosledjena kolicina vraca taj broj vesti,
-     * a ako nije postranicava vesti i vraca niz sa potrebnim podacima za paginaciju
+     * Return list of news from category id, if category id null return all news, if news count null result is paginated.
      *
-     * @param int $intCategoryId - id kategorije
-     * @param int $intQuantity - Broj vesti
+     * @param int $intCategoryId - Id category
+     * @param int $intQuantity - News count
      * @return mixed
      */
     public function listItems($intCategoryId = null, $intQuantity = null)
@@ -66,9 +74,9 @@ class ModelNews extends Model
     }
 
     /**
-     * Vraca podatke za jednu vest, ako je prosledjen id za tu vest, ako nije vraca poslednju vest
+     * Return news from id, if id null return last news
      *
-     * @param int $intItemId - id vesti
+     * @param int $intItemId - Id news
      * @return mixed
      */
     public function oneItem($intItemId = null)
@@ -95,9 +103,9 @@ class ModelNews extends Model
     }
 
     /**
-     * Vraca listu svih kategorija vesti, ako je prosledjen id vraca samo tu kategoriju
+     * Return category data, if id null return list all category
      *
-     * @param int $intCategoryId - id kategorije
+     * @param int $intCategoryId - Id category
      * @return mixed
      */
     public function categoryList($intCategoryId = null)

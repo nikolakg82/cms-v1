@@ -1,8 +1,10 @@
 <?php
 
 /**
- * Created by PhpStorm.
- * User: Nikola
+ * @copyright Copyright (c) 2005-2018 MSD - All Rights Reserved
+ * @link http://www.nikolamilenkovic.com
+ * @email info@nikolamilenkovic.com
+ * @author Nikola Milenkovic info@nikolamilenkovic.com dzoni82.kg@gmail.com http://www.nikolamilenkovic.com
  * Date: 5/3/2016
  * Time: 2:11 PM
  */
@@ -19,15 +21,16 @@ use fm\lib\help\Stringer;
 class ControllerLoader
 {
     /**
-     * @var array - Registar controlera
+     * @var array - Registry controllers
+     * @TODO Check is example correct
      *
-     * Tip niza je array(
-     *                       'Kljuc kontrolera' => array(
+     * Example: array(
+     *                       'controller_key' => array(
      *                                                      'lang' => array(
-     *                                                                          'Kljuc jezika' => 'Naziv'
+     *                                                                          'lang_key' => 'Title'
      *                                                                      ),
      *                                                      'table' => array(
-     *                                                                          'Naziv tabele'
+     *                                                                          'Table name'
      *                                                                       ),
      *                                                      'routes' => array(
      *                                                                          'route_path'    => array(
@@ -42,26 +45,25 @@ class ControllerLoader
     protected static $controllers;
 
     /**
-     * @var string - Kljuc trenutnog kontrolera
+     * @var string - Key current controller
      */
     protected static $current;
 
     /**
-     * @var array - Niz za promenu jezika na sajtu
+     * @var array - Array for change lang of site on current page
      *
-     * Tip niza je array(
-     *                      'Kljuc jezika' => array(
-     *                                              'path' => 'Putanja',
-     *                                              'name' => 'Naziv jezika'
+     * Example: array(
+     *                      'lang_key' => array(
+     *                                              'path' => 'path',
+     *                                              'name' => 'Lang title'
      *                                       ),
      *                      );
      */
     protected static $chLang;
 
-
-    //Geteri
     /**
-     * Vraca trenutni kontroler
+     * Get key current controller
+     *
      * @return string
      */
     public static function getCurrent()
@@ -69,22 +71,27 @@ class ControllerLoader
         return self::$current;
     }
 
+    /**
+     * Get array for lang change
+     *
+     * @return array
+     */
     public static function getChLang()
     {
         return self::$chLang;
     }
 
     /**
-     * Dodavanje kontrolera, putanja koja se prosledjuje je putanja do lokalnog MVC-a tj do MVC-a sajta
-     * @param string $strKey
-     * @param string $strPathMvc
-     * @param string $strExtendClassController
-     * @param string $strExtendClassModel
+     * Add controller
+     *
+     * @param string $strKey - Controller key
+     * @param string $strPathMvc - Path of MVC folder (local MVC on the app)
+     * @param string $strExtendClassController - Class witch app controller extended
+     * @param string $strExtendClassModel - Class witch app model extended
      * @throws \Exception
      */
     public static function addController($strKey, $strPathMvc, $strExtendClassController, $strExtendClassModel)
     {
-//    var_dump($strKey);
         ClassLoader::addClass('app\lib\mvc\model\Model' . ucfirst($strKey),
                                 $strPathMvc . "/model/Model" . ucfirst($strKey) . ".php", 'public',
                                             $strExtendClassModel);
@@ -97,7 +104,7 @@ class ControllerLoader
     }
 
     /**
-     * Dodavanje MLC-a za kontrolere, za svaki kontroler se setuje kako se zove na kojem jeziku, podesavanje se vrsi iz konfiguracionog fajla
+     * Setup controller name for each lang
      */
     public static function addLang()
     {
@@ -117,7 +124,7 @@ class ControllerLoader
     }
 
     /**
-     * Dodavanje tabela svakom kontroleru
+     * Add table for each controller
      */
     public static function addTables()
     {
@@ -134,10 +141,10 @@ class ControllerLoader
     }
 
     /**
-     * Load kontrolera, prosledjuje se kljuc kontrolera, ako postoji path proverava i ako postoje setovane tabele za kontroler radi mini rewrite
-     * I bilduje linkove za zamenu jezika
-     * @param string $strKey
-     * @param boolean $boolRouter
+     * Load controller
+     *
+     * @param string $strKey - Controller key
+     * @param boolean $boolRouter - If true return response object
      * @return object mixed
      */
     public static function load($strKey, $boolRouter = false)
@@ -238,8 +245,9 @@ class ControllerLoader
     }
 
     /**
-     * u odnosu na naziv kontrolera onoga sto pise u url-u setuje se jezik i setuje se kontroler
-     * @param string $strName
+     * Setup current lang and controller
+     *
+     * @param string $strName - Controller title (from path)
      */
     public static function setCurrentLangController($strName)
     {
