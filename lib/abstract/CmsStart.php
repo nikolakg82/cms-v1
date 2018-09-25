@@ -60,6 +60,13 @@ abstract class CmsStart
 
         if(CMS::$viewFormat == FM_JSON)
         {
+//            FM::header('Access-Control-Allow-Origin: *');
+//            FM::header('Access-Control-Allow-Credentials: true');
+//            header('Access-Control-Allow-Origin: *');
+//            header('Access-Control-Expose-Headers: X-My-Custom-Header, X-Another-Custom-Header');
+//            header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
+//            header('Access-Control-Max-Age: 1000');
+//            header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
             FM::header('Content-Type: application/json', true, $this->response->getResponseCode());
             echo json_encode($this->response->getData());
         }
