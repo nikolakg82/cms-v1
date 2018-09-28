@@ -105,7 +105,7 @@ abstract class CmsStart
                 $intUserId = Numeric::intVal($intUserId);
 
                 $strSql = "SELECT id, permission FROM " . CMS::$dbPrefix . "users
-                            WHERE token = :token AND id = :id AND token_expire_time > UNIX_TIMESTAMP() LIMIT 1";
+                            WHERE token = :token AND id = :id LIMIT 1";
 
                 $arrParams[':token'] = $strToken;
                 $arrParams[':id'] = $intUserId;
