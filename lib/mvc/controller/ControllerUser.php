@@ -35,7 +35,7 @@ class ControllerUser extends Controller
             $objResponse = $objResponse->setData($mixLoginData)->setResponseCode($intResponseCode);
         else
         {
-            // @TODO if login ok, set header and redirect to previous page else show login page with message
+            $objResponse = $objResponse->setData(FM::referer())->setResponseCode(301);
         }
 
         return $objResponse;
@@ -48,27 +48,34 @@ class ControllerUser extends Controller
         $boolStatus = false;
 
         $strToken = FM::getCustomHttpHeader('token');
+        $intUserId = FM::getCustomHttpHeader('user');
+        if(isset($intUserId))
+            $intUserId = Numeric::intVal($intUserId);
 
-        if(isset($strToken))
-        {
-            $intUserId = FM::getCustomHttpHeader('user');
-
-            if(isset($intUserId))
-            {
-                $intUserId = Numeric::intVal($intUserId);
-
-                $boolStatus = $this->getModel()->logout($strToken, $intUserId);
-            }
-        }
+        $boolStatus = $this->getModel()->logout($strToken, $intUserId);
 
         if(CMS::$viewFormat === FM_JSON)
             $objResponse = $objResponse->setData($boolStatus)->setResponseCode($intResponseCode);
         else
         {
-            // @TODO in each case show login page
+            $objResponse = $objResponse->setData(FM::referer())->setResponseCode(301);
         }
 
         return $objResponse;
+    }
+
+    public function index()
+    {
+        $strTemplate = 'index.tpl';
+        if(CMS::$userPermission == 1)
+            $strTemplate = 'login.tpl';
+
+        return $this->getResponse()->setResponseCode(200)->setTemplatePath(CMS_C_USER . "/$strTemplate");
+    }
+
+    public function getLogin()
+    {
+        return $this->getResponse()->setResponseCode(200)->setTemplatePath(CMS_C_USER . '/login.tpl');
     }
 
     public function getAdminUser()

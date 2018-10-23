@@ -30,7 +30,7 @@
 
     define('CMS_CONFIG',            CMS_ROOT        . 'config/');
 
-    define('CMS_SMARTY',            CMS_LIB        . 'smarty-3.1.29/libs/');
+    define('CMS_SMARTY',            CMS_LIB         . 'smarty-3.1.29/libs/');
 
     define('CMS_THEME',             CMS_ROOT        . 'theme/');
 
@@ -79,3 +79,8 @@
     define('CMS_T_VALUES',          'values');
     define('CMS_T_MIN_VALUE',       'min_value');
     define('CMS_T_MAX_VALUE',       'max_value');
+
+/**
+ * Others
+ */
+    define('CMS_USER_SESSION',      'app_frontend_user');

@@ -56,7 +56,12 @@ abstract class CmsStart
         $arrResponseCode = FM::includer(FM_CONFIG . 'responseCode.php', false);
 
         if(isset($arrResponseCode[$this->response->getResponseCode()]))
+        {
+            if($this->response->getResponseCode() == 301)
+                FM::redirect($this->response->getData());
+
             FM::header($arrResponseCode[$this->response->getResponseCode()], true, $this->response->getResponseCode());
+        }
 
         if(CMS::$viewFormat == FM_JSON)
         {
@@ -84,6 +89,8 @@ abstract class CmsStart
             CMS::$view->assign('controller', ControllerLoader::getCurrent());
             CMS::$view->assign('admin_theme', CMS::getAdminTheme());
             CMS::$view->assign('langs', Lang::getLang());
+            if(isset(CMS::$user))
+                CMS::$view->assign('user', CMS::$user);
 
             CMS::$view->show();
         }
@@ -114,11 +121,19 @@ abstract class CmsStart
                 if(CMS::$db->rowCount() > 0)
                 {
                     $arrData = CMS::$db->fetch(FM_FETCH_ASSOC, false);
-
-                    if(isset($arrData['permission']))
-                        CMS::$userPermission = $arrData['permission'];
                 }
             }
         }
+        else
+        {
+            FM::startSession(CMS_USER_SESSION, true);
+
+            $arrData = Request::session(CMS_USER_SESSION);
+            if(isset($arrData))
+                CMS::$user = $arrData;
+        }
+
+        if(isset($arrData['permission']))
+            CMS::$userPermission = $arrData['permission'];
     }
 }

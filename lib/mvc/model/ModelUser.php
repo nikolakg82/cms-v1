@@ -13,6 +13,7 @@ namespace cms\lib\mvc\model;
 
 use cms\CMS;
 use cms\lib\abstracts\Model;
+use fm\FM;
 
 class ModelUser extends Model
 {
@@ -20,7 +21,7 @@ class ModelUser extends Model
     {
         $mixLoginTokens = null;
 
-        $strSql = "SELECT id FROM " . CMS::$dbPrefix . "users
+        $strSql = "SELECT id, permission, email FROM " . CMS::$dbPrefix . "users
                             WHERE email = :email AND password = :password AND active = 'y' AND confirmed_date > 0 LIMIT 1";
 
         $arrParams[':email'] = $strEmail;
@@ -32,23 +33,32 @@ class ModelUser extends Model
             $arrData = CMS::$db->fetch(FM_FETCH_ASSOC, false);
             CMS::$db->free();
 
-            if(isset($arrData['id']))
+            if(CMS::$viewFormat === FM_JSON)
             {
-                $mixLoginTokens['token'] = $this->generateUserToken($arrData['id']);
-                $mixLoginTokens['user'] = $arrData['id'];
+                if(isset($arrData['id']))
+                {
+                    $mixLoginTokens['token'] = $this->generateUserToken($arrData['id']);
+                    $mixLoginTokens['user'] = $arrData['id'];
 
-                $strSqlUpdate = "UPDATE " . CMS::$dbPrefix . "users SET
-                                    token = :token,
-                                    token_expire_time = UNIX_TIMESTAMP() + 60 * 60 * 24
-                                    WHERE id = :id
-                                    ";
+                    $strSqlUpdate = "UPDATE " . CMS::$dbPrefix . "users SET
+                                        token = :token,
+                                        token_expire_time = UNIX_TIMESTAMP() + 60 * 60 * 24
+                                        WHERE id = :id
+                                        ";
 
-                $arrUpdateParams[':token'] = $mixLoginTokens['token'];
-                $arrUpdateParams[':id'] = $mixLoginTokens['user'];
-                CMS::$db->query($strSqlUpdate, $arrUpdateParams);
+                    $arrUpdateParams[':token'] = $mixLoginTokens['token'];
+                    $arrUpdateParams[':id'] = $mixLoginTokens['user'];
+                    CMS::$db->query($strSqlUpdate, $arrUpdateParams);
 
-                if(CMS::$db->rowCount() == 0)
-                    $mixLoginTokens = null;
+                    if(CMS::$db->rowCount() == 0)
+                        $mixLoginTokens = null;
+                }
+            }
+            else
+            {
+                FM::startSession(CMS_USER_SESSION);
+                FM::setSessionData(CMS_USER_SESSION, $arrData);
+                $mixLoginTokens = true;
             }
         }
 
@@ -59,18 +69,25 @@ class ModelUser extends Model
     {
         $boolReturn = true;
 
-        $strSqlUpdate = "UPDATE " . CMS::$dbPrefix . "users SET
-                                    token = '',
-                                    token_expire_time = 0
-                                    WHERE token = :token AND id = :id
-                                    ";
+        if(CMS::$viewFormat === FM_JSON)
+        {
+            $strSqlUpdate = "UPDATE " . CMS::$dbPrefix . "users SET
+                                        token = '',
+                                        token_expire_time = 0
+                                        WHERE token = :token AND id = :id
+                                        ";
 
-        $arrUpdateParams[':token'] = $strToken;
-        $arrUpdateParams[':id'] = $intUserId;
-        CMS::$db->query($strSqlUpdate, $arrUpdateParams);
+            $arrUpdateParams[':token'] = $strToken;
+            $arrUpdateParams[':id'] = $intUserId;
+            CMS::$db->query($strSqlUpdate, $arrUpdateParams);
 
-        if(CMS::$db->rowCount() == 0)
-            $boolReturn = false;
+            if(CMS::$db->rowCount() == 0)
+                $boolReturn = false;
+        }
+        else
+        {
+            FM::killSession(CMS_USER_SESSION, CMS_USER_SESSION);
+        }
 
         return $boolReturn;
     }
