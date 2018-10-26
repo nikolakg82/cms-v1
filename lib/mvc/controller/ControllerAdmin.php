@@ -12,11 +12,25 @@
 namespace cms\lib\mvc\controller;
 
 use cms\lib\abstracts\Controller;
+use cms\lib\publisher\AdminWorker;
+use fm\FM;
+use fm\lib\help\ClassLoader;
 
 class ControllerAdmin extends Controller
 {
+    /**
+     * @var AdminWorker
+     */
+    protected $adminWorker;
+
     public function index()
     {
-        return $this->getResponse()->setResponseCode(200)->setTemplatePath(CMS_C_ADMIN . '/index.tpl');
+        $arrChapters = $this->adminWorker->getStructure();
+        return $this->getResponse()->setResponseCode(200)->setTemplatePath(CMS_C_ADMIN . '/index.tpl')->setData($arrChapters);
+    }
+
+    public function __construct()
+    {
+        $this->adminWorker = ClassLoader::load('cms\lib\publisher\AdminWorker');
     }
 }

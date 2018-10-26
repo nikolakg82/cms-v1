@@ -38,6 +38,7 @@ ClassLoader::addClass('Smarty',             CMS_SMARTY . 'Smarty.class.php',    
 ClassLoader::addClass('SmartyBC',           CMS_SMARTY . 'SmartyBC.class.php',    'public');
 
 ClassLoader::addClass('cms\lib\publisher\View',              CMS_PUBLIC . 'View.php',             'public');
+ClassLoader::addClass('cms\lib\publisher\AdminWorker',       CMS_PUBLIC . 'AdminWorker.php',             'public');
 
 ClassLoader::addClass('cms\lib\mvc\controller\ControllerIndex',  CMS_CONTROLLER . 'ControllerIndex.php','public',        'cms\lib\abstracts\Controller');
 ClassLoader::addClass('cms\lib\mvc\controller\ControllerUser',  CMS_CONTROLLER . 'ControllerUser.php','public',        'cms\lib\abstracts\Controller');
